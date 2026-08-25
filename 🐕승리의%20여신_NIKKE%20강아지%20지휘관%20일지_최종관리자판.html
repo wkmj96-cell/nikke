@@ -99,14 +99,20 @@ h1{letter-spacing:-.7px}
 </style><style>
 .data-tools{justify-content:flex-end;max-width:1450px;margin:0 auto 8px;padding:0 22px}
 .data-tools button{font-size:12px}
+</style><style>
+.viewer-hidden{display:none!important}
+.meetup-comments{margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}
+.comment{display:flex;gap:8px;align-items:baseline;padding:6px 0;font-size:13px}
+.comment b{color:#f4c2ff}.comment span{flex:1}.comment time{font-size:10px;color:var(--muted)}
+.comment-write{display:flex;gap:6px;margin-top:8px}
+.comment-write input{flex:1}
 </style></head>
 <body><div class="wrap">
 <div class="top"><div><h1>🐕승리의 여신_NIKKE 강아지 지휘관 일지</h1><div class="sub"></div></div>
-<div class="row"><button onclick="backup()">백업</button><button onclick="document.getElementById('restore').click()">복원</button><input id="restore" type="file" accept=".json" class="hiddenInput"></div></div>
-<div class="row data-tools">
+</div>
+<div id="backupTools" class="admin-backup-tools">
   <button onclick="downloadBackup()">💾 데이터 백업</button>
   <button onclick="document.getElementById('backupFile').click()">📂 데이터 복원</button>
-  
   <input id="backupFile" type="file" accept=".json" class="hiddenInput">
 </div>
 <div id="sharedStatus" style="position:fixed;right:16px;bottom:16px;z-index:9999;background:#171520;color:#fff;padding:8px 11px;border-radius:12px;font-size:11px;box-shadow:0 6px 20px rgba(0,0,0,.2)">☁ 공용 데이터 연결 중…</div><div id="adminGate" class="admin-gate">
@@ -670,8 +676,15 @@ function populatePublicMemberPickers(){
    const old=el.value;el.innerHTML=opts;if(db.members.some(m=>m.id===old))el.value=old;
  });
 }
+
+function applyMeetupViewerMode(){
+  const editor=document.querySelector('#meetups .meetup-form')?.closest('.card');
+  if(editor) editor.classList.toggle('viewer-hidden',!isAdmin());
+}
 function applyAccessMode(){
+ applyMeetupViewerMode();
  document.querySelectorAll('.adminOnlyTab').forEach(b=>b.classList.toggle('hidden',!isAdmin()));
+ const backup=document.getElementById('backupTools');if(backup)backup.classList.toggle('hidden',!isAdmin());
  const lo=document.getElementById('adminLogoutBtn');if(lo)lo.classList.toggle('hidden',!isAdmin());
  if(!isAdmin()){
    ['input','members','bosses','warnings'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.add('hidden');});
@@ -872,6 +885,16 @@ function legacyMeetupHTML(x){
  let photos=(x.photos||[]).map(ph=>`<p><img class="diary-inline-image" src="${ph.data}" alt="${esc(ph.name)}"></p>`).join('');
  return body+photos;
 }
+
+function ensureMeetupComments(x){if(!x.comments)x.comments=[];return x.comments;}
+function addMeetupComment(id){
+ const x=db.meetups?.find(v=>v.id===id); if(!x)return;
+ const el=document.getElementById('comment-input-'+id);
+ const text=(el?.value||'').trim(); if(!text)return;
+ const name=isAdmin()?'관리자':'길드원';
+ ensureMeetupComments(x).push({id:uid(),name,text,date:new Date().toISOString()});
+ save(); renderMeetups();
+}
 function renderMeetups(){
  ensureMeetups();
  let dateQ=$('meetupSearchDate')?.value.trim()||'',memQ=$('meetupSearchMember')?.value.trim()||'';
@@ -883,7 +906,18 @@ function renderMeetups(){
      <h2>${esc(x.title)}</h2>
      ${participants.length?`<div class="meetup-participants"><span class="muted">참여자</span> ${participants.map(m=>`<button type="button" class="participant-chip readonly" onclick="searchMeetupMember('${esc(m.name)}')">@${esc(m.name)}</button>`).join(' ')}</div>`:''}
      <div class="meetup-body diary-render">${legacyMeetupHTML(x)}</div>
-     <div style="text-align:right;margin-top:12px"><button onclick="deleteMeetup('${x.id}')">삭제</button></div>
+     <div class="meetup-comments">
+       ${(ensureMeetupComments(x)).map(c=>`<div class="comment"><b>${esc(c.name)}</b><span>${esc(c.text)}</span><time>${esc(new Date(c.date).toLocaleString('ko-KR'))}</time></div>`).join('')}
+       <div class="comment-write"><input id="comment-input-${x.id}" placeholder="댓글 남기기"><button onclick="addMeetupComment('${x.id}')">댓글</button></div>
+     </div>
+     <div class="meetup-comment-box">
+      <div class="comment-list" id="comments-${x.id}"></div>
+      <div class="comment-write">
+        <input id="comment-input-${x.id}" placeholder="정모에 댓글 남기기">
+        <button onclick="addMeetupComment('${x.id}')">댓글</button>
+      </div>
+    </div>
+    ${isAdmin()?`<div style="text-align:right;margin-top:12px"><button onclick="deleteMeetup('${x.id}')">삭제</button></div>`:''}
    </article>`;
  }).join(''):'<div class="card hint">조건에 맞는 정모 일지가 없어.</div>';
 }
@@ -1100,35 +1134,31 @@ window.addEventListener('message',function(e){
 <script>
 function downloadBackup(){
   const data=JSON.stringify(db,null,2);
-  const blob=new Blob([data],{type:'application/json;charset=utf-8'});
+  const blob=new Blob([data],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
+  a.style.display='none';
+  a.href=url;
   a.download=`강아지지휘관일지_백업_${new Date().toISOString().slice(0,10)}.json`;
-  a.click();
-  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
-}
-function downloadDataText(){
-  const data=JSON.stringify(db,null,2);
-  const blob=new Blob([data],{type:'application/json;charset=utf-8'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download=`강아지지휘관일지_공유데이터_${new Date().toISOString().slice(0,10)}.json`;
-  a.click();
-  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
-  alert('공유용 데이터 파일을 만들었어. 이 파일을 길드원에게 보내면 같은 데이터로 확인할 수 있어.');
+  document.body.appendChild(a);
+  a.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,view:window}));
+  setTimeout(()=>{a.remove();URL.revokeObjectURL(url)},1000);
 }
 document.getElementById('backupFile')?.addEventListener('change',e=>{
   const f=e.target.files?.[0]; if(!f)return;
+  if(!isAdmin()){e.target.value='';return alert('관리자만 데이터를 복원할 수 있어.')}
   const r=new FileReader();
-  r.onload=()=>{
+  r.onload=async()=>{
     try{
       const incoming=JSON.parse(r.result);
       if(!incoming || typeof incoming!=='object')throw new Error('잘못된 데이터');
       db=incoming;
       localStorage.setItem(KEY,JSON.stringify(db));
       refresh();
-      alert('데이터 복원 완료!');
+      const ok=await pushSharedData();
+      alert(ok?'데이터 복원 완료! 공용 DB에도 반영됐어.':'데이터 복원은 됐지만 공용 DB 저장에 실패했어.');
     }catch(err){alert('백업 파일을 읽지 못했어.')}
+    e.target.value='';
   };
   r.readAsText(f,'UTF-8');
 });
