@@ -99,28 +99,17 @@ h1{letter-spacing:-.7px}
 </style><style>
 .data-tools{justify-content:flex-end;max-width:1450px;margin:0 auto 8px;padding:0 22px}
 .data-tools button{font-size:12px}
-</style><style>
-.viewer-hidden{display:none!important}
-.meetup-comments{margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}
-.comment{display:flex;gap:8px;align-items:baseline;padding:6px 0;font-size:13px}
-.comment b{color:#f4c2ff}.comment span{flex:1}.comment time{font-size:10px;color:var(--muted)}
-.comment-write{display:flex;gap:6px;margin-top:8px}
-.comment-write input{flex:1}
 </style></head>
 <body><div class="wrap">
 <div class="top"><div><h1>🐕승리의 여신_NIKKE 강아지 지휘관 일지</h1><div class="sub"></div></div>
-</div>
-<div id="backupTools" class="admin-backup-tools">
+<div class="row"><button onclick="backup()">백업</button><button onclick="document.getElementById('restore').click()">복원</button><input id="restore" type="file" accept=".json" class="hiddenInput"></div></div>
+<div class="row data-tools">
   <button onclick="downloadBackup()">💾 데이터 백업</button>
   <button onclick="document.getElementById('backupFile').click()">📂 데이터 복원</button>
+  
   <input id="backupFile" type="file" accept=".json" class="hiddenInput">
 </div>
-<div id="sharedStatus" style="position:fixed;right:16px;bottom:16px;z-index:9999;background:#171520;color:#fff;padding:8px 11px;border-radius:12px;font-size:11px;box-shadow:0 6px 20px rgba(0,0,0,.2)">☁ 공용 데이터 연결 중…</div><div id="adminGate" class="admin-gate">
-<button onclick="adminLogin()">👑 관리자 로그인</button>
-<button id="adminLogoutBtn" class="hidden" onclick="adminLogout()">로그아웃</button>
-<span id="sharedStatus">👀 조회 모드</span>
-</div>
-<div class="tabs"><button onclick="tab('dash')">🏠 홈</button><button class="adminOnlyTab" onclick="tab('input')">🐶 공격입력</button><button class="adminOnlyTab" onclick="tab('members')">🐶 길드원</button><button class="adminOnlyTab" onclick="tab('bosses')">🐶 보스</button><button onclick="tab('history')">🐶 개인전적</button><button onclick="tab('stats')">📊 통계</button><button onclick="tab('meetups')">🐶 정모</button><button class="adminOnlyTab" onclick="tab('warnings')">🚨 경고내역</button></div>
+<div id="sharedStatus" style="position:fixed;right:16px;bottom:16px;z-index:9999;background:#171520;color:#fff;padding:8px 11px;border-radius:12px;font-size:11px;box-shadow:0 6px 20px rgba(0,0,0,.2)">☁ 공용 데이터 연결 중…</div><div class="tabs"><button onclick="tab('dash')">🏠 홈</button><button onclick="tab('input')">🐶 공격입력</button><button onclick="tab('members')">🐶 길드원</button><button onclick="tab('bosses')">🐶 보스</button><button onclick="tab('history')">🐶 개인전적</button><button onclick="tab('stats')">📊 통계</button><button onclick="tab('meetups')">🐶 정모</button><button onclick="tab('warnings')">🚨 경고내역</button></div>
 
 <section id="dash">
 <div class="grid"><div class="stat"><span class="muted">레이드</span><b id="dRaids">0</b></div><div class="stat"><span class="muted">길드원</span><b id="dMembers">0</b></div><div class="stat"><span class="muted">참여</span><b id="dPart">0</b></div><div class="stat"><span class="muted">미참여</span><b id="dAbs">0</b></div></div>
@@ -201,7 +190,15 @@ h1{letter-spacing:-.7px}
 <div class="card"><h2>등록된 보스 정보</h2><div id="bossList"></div></div>
 </section>
 <section id="stats" class="hidden">
-<div class="card"><div class="row"><h2 style="margin:0">📊 개인 통계 조회</h2><select id="publicStatsMember" onchange="setPublicMember(this.value)" style="width:260px"><option value="">길드원 선택</option></select></div><div class="small muted">길드원 누구든 선택해서 개인 통계를 볼 수 있어.</div></div>
+<div class="card">
+  <div class="row">
+    <h2 style="margin:0">📊 개인 통계 조회</h2>
+    <select id="publicStatsMember" onchange="setPublicMember(this.value)" style="width:260px">
+      <option value="">길드원 선택</option>
+    </select>
+  </div>
+  <div class="small muted">길드원을 선택하면 개인 성장 그래프와 전적을 바로 볼 수 있어.</div>
+</div>
 <div class="card">
   <div class="row"><h2>📊 길드 통계</h2><select id="statsRaid" onchange="renderStats()" style="width:240px"></select></div>
   <div class="stats-grid">
@@ -291,75 +288,104 @@ h1{letter-spacing:-.7px}
 <div class="card" style="background:#11161f;margin-top:14px"><h3>경고 이력</h3><div id="warningHistory"></div></div>
 </div></section>
 <section id="history" class="hidden">
-<div class="card"><div class="row"><h2>🐶 개인 전적 조회</h2><select id="publicMemberPick" onchange="setPublicMember(this.value)" style="width:260px"><option value="">길드원 선택</option></select></div><div class="small muted">길드원 누구든 선택해서 해당 사람의 기록을 볼 수 있어.</div></div><div class="card"><div class="form"><div><label>길드원</label><select id="hm" onchange="renderHistory()"></select></div><div><label>그래프</label><select id="metric" onchange="renderHistory()"><option value="damage">레이드 총 딜량</option><option value="level">평균 레벨</option><option value="avg">공격당 평균 딜</option></select></div></div></div>
-<div class="card"><h2>📈 개인 성장 추이</h2><div id="line" class="chartbox"></div><div id="person"></div></div><div class="card"><h2>상세 기록</h2><div id="ht"></div></div></section>
+<div class="card">
+  <div class="row">
+    <h2>🐶 개인 전적 조회</h2>
+    <select id="publicMemberPick" onchange="setPublicMember(this.value)" style="width:260px">
+      <option value="">길드원 선택</option>
+    </select>
+  </div>
+  <div class="small muted">길드원 누구든 선택해서 해당 사람의 기록과 통계를 볼 수 있어.</div>
+</div><div class="card"><div class="form"><div><label>길드원</label><select id="hm" onchange="renderHistory()"></select></div><div><label>그래프</label><select id="metric" onchange="renderHistory()"><option value="damage">레이드 총 딜량</option><option value="level">평균 레벨</option><option value="avg">공격당 평균 딜</option></select></div></div></div>
+<div class="card"><h2>📈 개인 성장 추이</h2><div id="line" class="chartbox"></div><div id="person"></div><div id="publicMemberSummary" class="card" style="background:#11161f;margin-top:12px"></div></div><div class="card"><h2>상세 기록</h2><div id="ht"></div></div></section>
 </div>
 
 <script>
 const KEY='guildRaidTrackerV2';
 const SUPABASE_URL='https://cnieacagqygkizcrfanj.supabase.co';
 const SUPABASE_KEY='sb_publishable_Snq-sn3BqzRS-GJpts8NfA_5mzNUvkz';
-const ADMIN_FN_URL='https://cnieacagqygkizcrfanj.supabase.co/functions/v1/guild-raid-admin';
 const SUPABASE_ROW=1;
-let db=JSON.parse(localStorage.getItem(KEY)||'{"members":[],"raids":[],"records":[],"bosses":[],"warningEvents":[],"meetups":[]}');
-let sharedSaving=false, sharedTimer=null, adminPassword=sessionStorage.getItem('guild_admin_password')||'';
-
-function isAdmin(){return !!adminPassword;}
-async function verifyAdminPassword(pwd){
-  try{
-    const r=await fetch(ADMIN_FN_URL,{method:'POST',headers:{'Content-Type':'application/json','x-admin-password':pwd},body:JSON.stringify({action:'read'})});
-    return r.ok && (await r.json()).ok===true;
-  }catch(e){return false;}
-}
-async function adminLogin(){
-  const p=prompt('관리자 비밀번호를 입력해줘.');
-  if(p===null)return;
-  if(!(await verifyAdminPassword(p)))return alert('비밀번호가 틀렸어.');
-  adminPassword=p;sessionStorage.setItem('guild_admin_password',p);
-  applyAccessMode();setSharedStatus('👑 관리자 모드');
-}
-function adminLogout(){adminPassword='';sessionStorage.removeItem('guild_admin_password');applyAccessMode();setSharedStatus('👀 조회 모드');}
-function setSharedStatus(t){const el=document.getElementById('sharedStatus');if(el)el.textContent=t;}
+let db=JSON.parse(localStorage.getItem(KEY)||'{"members":[],"raids":[],"records":[]}');
+let sharedReady=false;
+let sharedSaving=false;
+let sharedTimer=null;
 
 async function loadSharedData(){
   try{
-    const r=await fetch(`${SUPABASE_URL}/rest/v1/guild_raid_state?id=eq.${SUPABASE_ROW}&select=data,updated_at`,{headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}});
-    if(!r.ok)throw new Error('공용 DB 읽기 실패 '+r.status);
+    const r=await fetch(`${SUPABASE_URL}/rest/v1/guild_raid_state?id=eq.${SUPABASE_ROW}&select=data,updated_at`,{
+      headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}
+    });
+    if(!r.ok) throw new Error('공용 DB 읽기 실패 '+r.status);
     const rows=await r.json();
-    if(rows[0]?.data){db=rows[0].data;localStorage.setItem(KEY,JSON.stringify(db));}
-    window.__sharedStamp=rows[0]?.updated_at||'';
-    refresh();subscribeSharedData();applyAccessMode();setSharedStatus(isAdmin()?'👑 관리자 모드':'👀 조회 모드');
-  }catch(e){console.warn(e);refresh();applyAccessMode();setSharedStatus('⚠ 공용 DB 연결 실패');}
+    if(rows[0]?.data && Object.keys(rows[0].data).length){
+      db=rows[0].data;
+      localStorage.setItem(KEY,JSON.stringify(db));
+    }else{
+      await pushSharedData();
+    }
+    sharedReady=true;
+    const st=document.getElementById('sharedStatus'); if(st) st.textContent='☁ 공용 데이터 연결됨';
+    refresh();
+    subscribeSharedData();
+  }catch(e){
+    console.warn('[공용 DB]',e);
+    sharedReady=false;
+    const st=document.getElementById('sharedStatus'); if(st) st.textContent='⚠ 공용 DB 연결 실패 · 로컬 모드';
+    refresh();
+  }
 }
+
 async function pushSharedData(){
-  if(!isAdmin()||sharedSaving)return false;
+  if(sharedSaving)return;
   sharedSaving=true;
   try{
-    const r=await fetch(ADMIN_FN_URL,{method:'POST',headers:{'Content-Type':'application/json','x-admin-password':adminPassword},body:JSON.stringify({action:'save',data:db})});
-    if(!r.ok)throw new Error('공용 DB 저장 실패 '+r.status);
-    return true;
-  }catch(e){console.warn('[공용 DB 저장]',e);return false;}
-  finally{sharedSaving=false;}
+    localStorage.setItem(KEY,JSON.stringify(db));
+    const r=await fetch(`${SUPABASE_URL}/rest/v1/guild_raid_state?on_conflict=id`,{
+      method:'POST',
+      headers:{
+        apikey:SUPABASE_KEY,
+        Authorization:`Bearer ${SUPABASE_KEY}`,
+        'Content-Type':'application/json',
+        Prefer:'resolution=merge-duplicates,return=minimal'
+      },
+      body:JSON.stringify({id:SUPABASE_ROW,data:db,updated_at:new Date().toISOString()})
+    });
+    if(!r.ok) throw new Error('공용 DB 저장 실패 '+r.status);
+  }catch(e){
+    console.warn('[공용 DB 저장]',e);
+  }finally{sharedSaving=false;}
 }
-function save(){
-  localStorage.setItem(KEY,JSON.stringify(db));refresh();
-  if(!isAdmin()){alert('조회 모드에서는 수정할 수 없어. 관리자 로그인해줘.');return;}
-  clearTimeout(sharedTimer);sharedTimer=setTimeout(()=>pushSharedData(),150);
-}
+
 function subscribeSharedData(){
   if(window.__sharedPolling)return;
+  // 단순하고 안정적으로: 새로고침 없이도 다른 사람이 저장한 변경을 3초마다 확인.
   window.__sharedPolling=setInterval(async()=>{
     if(sharedSaving)return;
     try{
-      const r=await fetch(`${SUPABASE_URL}/rest/v1/guild_raid_state?id=eq.${SUPABASE_ROW}&select=data,updated_at`,{headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}});
-      const rows=await r.json(),incoming=rows[0]?.data,stamp=rows[0]?.updated_at||'';
-      if(incoming&&stamp!==window.__sharedStamp){window.__sharedStamp=stamp;db=incoming;localStorage.setItem(KEY,JSON.stringify(db));refresh();}
+      const r=await fetch(`${SUPABASE_URL}/rest/v1/guild_raid_state?id=eq.${SUPABASE_ROW}&select=data,updated_at`,{
+        headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}
+      });
+      const rows=await r.json();
+      const incoming=rows[0]?.data;
+      const stamp=rows[0]?.updated_at||'';
+      if(incoming && stamp!==window.__sharedStamp){
+        window.__sharedStamp=stamp;
+        db=incoming;
+        localStorage.setItem(KEY,JSON.stringify(db));
+        refresh();
+      }
     }catch(e){}
   },3000);
 }
 
 const bosses=[['보스 1','작열'],['보스 2','철갑'],['보스 3','수냉'],['보스 4','풍압'],['보스 5','전격']];
 const $=id=>document.getElementById(id);
+function save(){
+  localStorage.setItem(KEY,JSON.stringify(db));
+  refresh();
+  clearTimeout(sharedTimer);
+  sharedTimer=setTimeout(()=>pushSharedData(),150);
+}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2)}
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function tab(id){document.querySelectorAll('section').forEach(x=>x.classList.add('hidden'));$(id).classList.remove('hidden');refresh()}
@@ -665,31 +691,21 @@ function renderBosses(){
 function deleteRaid(){let rid=$('inputRaid').value;if(!rid)return alert('삭제할 회차를 선택해줘.');let r=raid(rid);if(confirm(`${esc(r.no)}와 모든 기록을 삭제할까?`)){db.raids=db.raids.filter(x=>x.id!==rid);db.records=db.records.filter(x=>x.raid!==rid);save()}}
 
 function setPublicMember(id){
- if(!id)return;
- ['publicMemberPick','publicStatsMember','hm','statsMember'].forEach(k=>{const el=document.getElementById(k);if(el)el.value=id;});
- renderHistory();renderStatsGrowth();
+  if(!id)return;
+  ['publicMemberPick','publicStatsMember','hm','statsMember'].forEach(k=>{
+    const el=document.getElementById(k);
+    if(el)el.value=id;
+  });
+  renderHistory();
+  renderStatsGrowth();
 }
 function populatePublicMemberPickers(){
- const opts='<option value="">길드원 선택</option>'+db.members.map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join('');
- ['publicMemberPick','publicStatsMember','hm','statsMember'].forEach(id=>{
-   const el=document.getElementById(id);if(!el)return;
-   const old=el.value;el.innerHTML=opts;if(db.members.some(m=>m.id===old))el.value=old;
- });
-}
-
-function applyMeetupViewerMode(){
-  const editor=document.querySelector('#meetups .meetup-form')?.closest('.card');
-  if(editor) editor.classList.toggle('viewer-hidden',!isAdmin());
-}
-function applyAccessMode(){
- applyMeetupViewerMode();
- document.querySelectorAll('.adminOnlyTab').forEach(b=>b.classList.toggle('hidden',!isAdmin()));
- const backup=document.getElementById('backupTools');if(backup)backup.classList.toggle('hidden',!isAdmin());
- const lo=document.getElementById('adminLogoutBtn');if(lo)lo.classList.toggle('hidden',!isAdmin());
- if(!isAdmin()){
-   ['input','members','bosses','warnings'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.add('hidden');});
-   ['dash','history','stats','meetups'].forEach(id=>{const el=document.getElementById(id);if(el&&!document.querySelector(`.tab-btn-active[data-tab="${id}"]`)){}});
- }
+  const opts='<option value="">길드원 선택</option>'+db.members.map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join('');
+  ['publicMemberPick','publicStatsMember','hm','statsMember'].forEach(id=>{
+    const el=document.getElementById(id); if(!el)return;
+    const old=el.value; el.innerHTML=opts;
+    if(db.members.some(m=>m.id===old)) el.value=old;
+  });
 }
 function renderStats(){
  let opts=db.raids.map(r=>`<option value="${r.id}">${esc(r.no)}${r.memo?' · '+esc(r.memo):''}</option>`).join('');
@@ -885,16 +901,6 @@ function legacyMeetupHTML(x){
  let photos=(x.photos||[]).map(ph=>`<p><img class="diary-inline-image" src="${ph.data}" alt="${esc(ph.name)}"></p>`).join('');
  return body+photos;
 }
-
-function ensureMeetupComments(x){if(!x.comments)x.comments=[];return x.comments;}
-function addMeetupComment(id){
- const x=db.meetups?.find(v=>v.id===id); if(!x)return;
- const el=document.getElementById('comment-input-'+id);
- const text=(el?.value||'').trim(); if(!text)return;
- const name=isAdmin()?'관리자':'길드원';
- ensureMeetupComments(x).push({id:uid(),name,text,date:new Date().toISOString()});
- save(); renderMeetups();
-}
 function renderMeetups(){
  ensureMeetups();
  let dateQ=$('meetupSearchDate')?.value.trim()||'',memQ=$('meetupSearchMember')?.value.trim()||'';
@@ -906,18 +912,7 @@ function renderMeetups(){
      <h2>${esc(x.title)}</h2>
      ${participants.length?`<div class="meetup-participants"><span class="muted">참여자</span> ${participants.map(m=>`<button type="button" class="participant-chip readonly" onclick="searchMeetupMember('${esc(m.name)}')">@${esc(m.name)}</button>`).join(' ')}</div>`:''}
      <div class="meetup-body diary-render">${legacyMeetupHTML(x)}</div>
-     <div class="meetup-comments">
-       ${(ensureMeetupComments(x)).map(c=>`<div class="comment"><b>${esc(c.name)}</b><span>${esc(c.text)}</span><time>${esc(new Date(c.date).toLocaleString('ko-KR'))}</time></div>`).join('')}
-       <div class="comment-write"><input id="comment-input-${x.id}" placeholder="댓글 남기기"><button onclick="addMeetupComment('${x.id}')">댓글</button></div>
-     </div>
-     <div class="meetup-comment-box">
-      <div class="comment-list" id="comments-${x.id}"></div>
-      <div class="comment-write">
-        <input id="comment-input-${x.id}" placeholder="정모에 댓글 남기기">
-        <button onclick="addMeetupComment('${x.id}')">댓글</button>
-      </div>
-    </div>
-    ${isAdmin()?`<div style="text-align:right;margin-top:12px"><button onclick="deleteMeetup('${x.id}')">삭제</button></div>`:''}
+     <div style="text-align:right;margin-top:12px"><button onclick="deleteMeetup('${x.id}')">삭제</button></div>
    </article>`;
  }).join(''):'<div class="card hint">조건에 맞는 정모 일지가 없어.</div>';
 }
@@ -1134,33 +1129,37 @@ window.addEventListener('message',function(e){
 <script>
 function downloadBackup(){
   const data=JSON.stringify(db,null,2);
-  const blob=new Blob([data],{type:'application/json'});
-  const url=URL.createObjectURL(blob);
+  const blob=new Blob([data],{type:'application/json;charset=utf-8'});
   const a=document.createElement('a');
-  a.style.display='none';
-  a.href=url;
+  a.href=URL.createObjectURL(blob);
   a.download=`강아지지휘관일지_백업_${new Date().toISOString().slice(0,10)}.json`;
-  document.body.appendChild(a);
-  a.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,view:window}));
-  setTimeout(()=>{a.remove();URL.revokeObjectURL(url)},1000);
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+function downloadDataText(){
+  const data=JSON.stringify(db,null,2);
+  const blob=new Blob([data],{type:'application/json;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`강아지지휘관일지_공유데이터_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  alert('공유용 데이터 파일을 만들었어. 이 파일을 길드원에게 보내면 같은 데이터로 확인할 수 있어.');
 }
 document.getElementById('backupFile')?.addEventListener('change',e=>{
   const f=e.target.files?.[0]; if(!f)return;
-  if(!isAdmin()){e.target.value='';return alert('관리자만 데이터를 복원할 수 있어.')}
   const r=new FileReader();
-  r.onload=async()=>{
+  r.onload=()=>{
     try{
       const incoming=JSON.parse(r.result);
       if(!incoming || typeof incoming!=='object')throw new Error('잘못된 데이터');
       db=incoming;
       localStorage.setItem(KEY,JSON.stringify(db));
       refresh();
-      const ok=await pushSharedData();
-      alert(ok?'데이터 복원 완료! 공용 DB에도 반영됐어.':'데이터 복원은 됐지만 공용 DB 저장에 실패했어.');
+      alert('데이터 복원 완료!');
     }catch(err){alert('백업 파일을 읽지 못했어.')}
-    e.target.value='';
   };
   r.readAsText(f,'UTF-8');
 });
 </script>
-<script>window.addEventListener('load',()=>{applyAccessMode();loadSharedData();});</script><script>window.addEventListener('load',()=>{applyAccessMode();loadSharedData();});</script></body></html>
+<script>window.addEventListener('load',()=>loadSharedData());</script></body></html>
