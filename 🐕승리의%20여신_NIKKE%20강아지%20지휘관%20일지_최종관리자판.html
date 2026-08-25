@@ -1,0 +1,1136 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🐕승리의 여신_NIKKE 강아지 지휘관 일지 v2</title>
+<style>
+:root{--bg:#0e1118;--card:#171c25;--card2:#202735;--line:#303949;--text:#f5f7fb;--muted:#9ca7ba;--pink:#ff6fae;--green:#68d6a6;--red:#ff7d8d}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#0e1118,#17101a);color:var(--text);font-family:system-ui,"Noto Sans KR",sans-serif}.wrap{max-width:1450px;margin:auto;padding:22px}
+.top{display:flex;justify-content:space-between;gap:15px;align-items:center}.top h1{margin:0}.sub{color:var(--muted);margin-top:4px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}button{background:var(--card2);border:1px solid var(--line);color:var(--text);border-radius:9px;padding:9px 12px;cursor:pointer}button:hover{border-color:var(--pink)}button.primary{background:var(--pink);border-color:var(--pink);font-weight:700}.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:17px;margin-bottom:15px}.hidden{display:none}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat{background:var(--card2);border-radius:11px;padding:13px}.stat b{display:block;font-size:22px;margin-top:4px}.muted{color:var(--muted)}label{display:block;color:var(--muted);font-size:12px;margin-bottom:4px}input,select,textarea{width:100%;background:#0e131b;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px}textarea{resize:vertical}.form{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.right{margin-left:auto}table{border-collapse:collapse;width:100%}th,td{border-bottom:1px solid var(--line);padding:7px 6px;font-size:13px;white-space:nowrap}th{color:var(--muted);text-align:left;position:sticky;top:0;background:var(--card)}.scroll{overflow:auto}.preset{display:flex;flex-direction:column;gap:10px}.member-card{background:#11161f;border:1px solid var(--line);border-radius:13px;overflow:hidden}.member-head{display:flex;align-items:center;gap:10px;padding:9px 12px;background:#1d2430}.member-head .idx{color:var(--muted);font-size:12px;width:28px}.member-head .name{font-weight:800;font-size:15px}.member-head .summary{margin-left:auto;color:var(--muted);font-size:12px}.attack-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:9px}.attack{min-width:230px;background:#11161f;border:1px solid var(--line);border-radius:10px;padding:7px}.attack .mini{display:grid;grid-template-columns:1fr 1fr;gap:5px}.attack .mini .full{grid-column:span 2}.attack.done{border-color:#5b3b4a}.attack .num{font-weight:700;color:var(--pink);margin-bottom:4px}.lastlabel{font-size:11px;color:#ffd0df}.warnbtn{padding:3px 7px;font-size:11px;margin-left:6px}.warnbtn.active{background:#7b3345;border-color:#ff7d8d;color:#fff}.check{width:auto!important}.pill{display:inline-block;padding:3px 7px;border-radius:99px;background:#30384a;font-size:11px}.abs{color:var(--red)}.ok{color:var(--green)}.hint{padding:10px;background:#11161f;border:1px dashed #3b4557;border-radius:10px;color:var(--muted);font-size:13px}.memberedit{display:grid;grid-template-columns:1fr auto;gap:6px}.chartbox{background:#0e131b;border:1px solid var(--line);border-radius:11px;padding:8px}.hiddenInput{display:none}@media(max-width:900px){.grid,.form{grid-template-columns:repeat(2,1fr)}.attack-row{grid-template-columns:1fr}}@media(max-width:600px){.grid,.form{grid-template-columns:1fr}.wrap{padding:12px}}
+</style>
+<style>
+.warning-person{border:1px solid var(--line);border-radius:12px;background:#11161f;margin:10px 0;overflow:hidden}
+.warning-person-head{display:flex;align-items:center;padding:12px 14px;background:#1d2430}
+.warning-person-name{font-weight:800;font-size:16px}
+.warning-total{margin-left:auto;font-weight:800}
+.warning-history-list{padding:4px 0}
+.warning-history-row{display:grid;grid-template-columns:105px 70px 55px 60px 1fr;gap:8px;align-items:center;padding:8px 14px;border-top:1px solid #252c38;font-size:13px}
+.warning-date,.warning-round,.warning-type{color:var(--muted)}
+.warning-plus{color:#ff7d8d;font-weight:700}
+.warning-minus{color:#8de0a8;font-weight:700}
+.warning-reason{word-break:break-word}
+@media(max-width:700px){.warning-history-row{grid-template-columns:1fr 70px 55px;}.warning-type{display:none}.warning-reason{grid-column:1 / -1}}
+</style><style>.raid-closed{display:inline-block;padding:3px 7px;border-radius:999px;background:#303846;color:#aeb7c5;font-size:11px}.raid-open{display:inline-block;padding:3px 7px;border-radius:999px;background:#263d31;color:#9ce0b0;font-size:11px}</style><style>
+:root{
+ --bg:#0c0d13;--panel:#151722;--panel2:#1b1d29;--line:#303345;
+ --text:#f4f3f8;--muted:#999aaa;--pink:#ff7aa8;--accent:#d9a7ff;
+}
+body{background:radial-gradient(circle at 15% 0%,#252033 0,#0c0d13 42%,#090a0f 100%);}
+header{border-bottom:1px solid #343547;background:rgba(12,13,19,.92);backdrop-filter:blur(10px)}
+h1{letter-spacing:-.7px}
+.subtitle{font-size:10px;letter-spacing:3px;color:#77798c;margin-top:3px}
+.tabs{background:#11121a;border:1px solid #292b3a;border-radius:14px;padding:5px}
+.tabs button{border:0;border-radius:10px}
+.tabs button:hover{background:#252638}
+.card{box-shadow:0 8px 30px rgba(0,0,0,.18)}
+.member-head{background:linear-gradient(90deg,#1e2030,#181a24)}
+.attack{background:#12141d}
+.attack .num{font-size:13px;letter-spacing:.5px}
+.preset{gap:12px}
+.member-card{border-color:#2d3040}
+.warnbtn.active{box-shadow:0 0 0 1px #ff7d8d inset}
+.warning-person{background:#12141d;border-color:#323547}
+.warning-person-head{background:linear-gradient(90deg,#242132,#1c1e2a)}
+</style><style>
+.meetup-entry{overflow:hidden}
+.meetup-date{font-size:12px;color:var(--pink);font-weight:700;letter-spacing:.5px}
+.meetup-entry h2{margin:5px 0 14px}
+.meetup-body{line-height:1.75;color:#e8e7ee;white-space:normal}
+.meetup-photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:16px}
+.meetup-photos figure{margin:0;border-radius:12px;overflow:hidden;background:#0e1017;border:1px solid var(--line)}
+.meetup-photos img{display:block;width:100%;height:180px;object-fit:cover}
+.meetup-photos figcaption{padding:6px 8px;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+</style><style>
+.meetup-searchbar{display:grid;grid-template-columns:1fr 1fr auto;gap:8px}
+.meetup-form{align-items:start}
+.diary-toolbar{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 8px}
+.diary-editor{min-height:360px;background:#0e1118;border:1px solid var(--line);border-radius:12px;padding:16px;line-height:1.8;outline:none}
+.diary-editor:empty:before{content:attr(data-placeholder);color:#6f7485;white-space:pre-line;pointer-events:none}
+.diary-editor p{margin:0 0 10px}
+.diary-editor hr{border:0;border-top:1px solid #3a3e50;margin:16px 0}
+.diary-inline-image{display:block;max-width:min(100%,760px);max-height:600px;width:auto;height:auto;border-radius:12px;margin:12px 0;box-shadow:0 8px 24px #0003}
+.participant-chips{display:flex;gap:6px;flex-wrap:wrap;min-height:28px;margin-bottom:6px}
+.participant-chip{display:inline-flex;align-items:center;gap:4px;border:1px solid #4a3a53;background:#241d2e;color:#f3c9ff;border-radius:999px;padding:4px 8px;font-size:12px}
+.participant-chip button{padding:0;border:0;background:none;color:inherit;font-size:14px}
+.participant-chip.readonly{cursor:pointer}
+.mention-suggestions{position:relative;z-index:20;display:flex;flex-direction:column;gap:4px;max-width:420px;background:#171a24;border:1px solid var(--line);border-radius:10px;padding:6px;margin-top:4px}
+.mention-suggestions button{text-align:left;border:0;background:transparent}
+.mention-suggestions button:hover{background:#272b3a}
+.meetup-participants{margin-bottom:12px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.diary-render{line-height:1.8}
+.diary-render img.diary-inline-image{display:block;max-width:min(100%,760px);max-height:600px;width:auto;height:auto;border-radius:12px;margin:14px 0}
+.diary-render hr{border:0;border-top:1px solid #3a3e50;margin:16px 0}
+.diary-render p{margin:0 0 10px}
+@media(max-width:700px){.meetup-searchbar{grid-template-columns:1fr}.diary-editor{min-height:280px}}
+</style><style>
+.stats-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.stats-two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.stats-filter{grid-template-columns:1fr 1fr}
+.rank-bars{display:flex;flex-direction:column;gap:12px}
+.rank-row{padding:8px 0}
+.rank-name{display:grid;grid-template-columns:32px 1fr auto;gap:8px;align-items:center}
+.rank-name span{color:var(--muted);font-size:12px}.rank-name em{font-style:normal;color:var(--muted);font-size:12px}
+.bar-bg{height:10px;background:#0e1118;border-radius:999px;overflow:hidden;margin-top:6px}
+.bar-fill{height:100%;background:linear-gradient(90deg,#ff6fae,#c694ff);border-radius:999px}
+@media(max-width:1000px){.stats-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){.stats-two-col{grid-template-columns:1fr}.stats-grid{grid-template-columns:repeat(2,1fr)}.stats-filter{grid-template-columns:1fr}}
+</style><style>
+.attr-wheel{display:flex;align-items:center;justify-content:center;min-height:35px;border:1px solid #3b3048;background:#1f1828;border-radius:8px;color:#f1c9ff;font-weight:800;letter-spacing:.3px}
+</style><style>
+.nikke-import-card{border-color:#503653}
+.nikke-import-card textarea{margin-top:10px}
+</style><style>
+.nikke-import-card{border-color:#5a3855;box-shadow:0 10px 30px rgba(0,0,0,.16)}
+.nikke-import-card textarea{margin-top:10px}
+</style><style>
+.nikke-import-card{border-color:#5a3855;box-shadow:0 10px 30px rgba(0,0,0,.16)}
+.nikke-import-card textarea{margin-top:10px}
+.attack input[data-f$="-char0"],.attack input[data-f$="-char1"],.attack input[data-f$="-char2"],.attack input[data-f$="-char3"],.attack input[data-f$="-char4"]{font-size:12px}
+</style><style>
+.data-tools{justify-content:flex-end;max-width:1450px;margin:0 auto 8px;padding:0 22px}
+.data-tools button{font-size:12px}
+</style></head>
+<body><div class="wrap">
+<div class="top"><div><h1>🐕승리의 여신_NIKKE 강아지 지휘관 일지</h1><div class="sub"></div></div>
+<div class="row"><button onclick="backup()">백업</button><button onclick="document.getElementById('restore').click()">복원</button><input id="restore" type="file" accept=".json" class="hiddenInput"></div></div>
+<div class="row data-tools">
+  <button onclick="downloadBackup()">💾 데이터 백업</button>
+  <button onclick="document.getElementById('backupFile').click()">📂 데이터 복원</button>
+  
+  <input id="backupFile" type="file" accept=".json" class="hiddenInput">
+</div>
+<div id="sharedStatus" style="position:fixed;right:16px;bottom:16px;z-index:9999;background:#171520;color:#fff;padding:8px 11px;border-radius:12px;font-size:11px;box-shadow:0 6px 20px rgba(0,0,0,.2)">☁ 공용 데이터 연결 중…</div><div id="adminGate" class="admin-gate">
+<button onclick="adminLogin()">👑 관리자 로그인</button>
+<button id="adminLogoutBtn" class="hidden" onclick="adminLogout()">로그아웃</button>
+<span id="sharedStatus">👀 조회 모드</span>
+</div>
+<div class="tabs"><button onclick="tab('dash')">🏠 홈</button><button class="adminOnlyTab" onclick="tab('input')">🐶 공격입력</button><button class="adminOnlyTab" onclick="tab('members')">🐶 길드원</button><button class="adminOnlyTab" onclick="tab('bosses')">🐶 보스</button><button onclick="tab('history')">🐶 개인전적</button><button onclick="tab('stats')">📊 통계</button><button onclick="tab('meetups')">🐶 정모</button><button class="adminOnlyTab" onclick="tab('warnings')">🚨 경고내역</button></div>
+
+<section id="dash">
+<div class="grid"><div class="stat"><span class="muted">레이드</span><b id="dRaids">0</b></div><div class="stat"><span class="muted">길드원</span><b id="dMembers">0</b></div><div class="stat"><span class="muted">참여</span><b id="dPart">0</b></div><div class="stat"><span class="muted">미참여</span><b id="dAbs">0</b></div></div>
+<div class="card"><div class="row"><h2>레이드 요약</h2><select id="dashRaid" onchange="renderDash()" style="width:220px"></select></div><div id="dashInfo"></div></div>
+<div class="card"><h2>전체 딜 기여도</h2><div id="pie" class="chartbox"></div></div>
+<div class="card"><h2>딜량 순위</h2><div id="rank"></div></div><div class="card"><h2>⚔️ 보스별 · 약점별 딜 비교</h2><p class="muted">같은 토커티브라도 작열/철갑처럼 약점이 달랐던 기록을 따로 비교해.</p><div id="bossCompare"></div></div>
+</section>
+
+<section id="input" class="hidden">
+<div class="card"><h2>레이드 만들기</h2><div class="form"><div><label>레이드 회차 / 이름</label><input id="raidNo" type="text" placeholder="예: 1차 / 2026-08 1주차 / 니케 여름레이드"></div><div><label>메모</label><input id="raidMemo"></div><div style="align-self:end"><button class="primary" onclick="makeRaid()">생성</button> <button onclick="closeRaid()">🔒 회차 마감</button> <button onclick="deleteRaid()">선택 회차 삭제</button></div></div></div>
+<div class="card"><div class="row"><div><h2 style="margin:0">⚡ 3타 일괄 입력</h2><div class="muted">이제 32명 × 3타를 따로 저장 버튼 누를 필요 없어.</div></div><select id="inputRaid" onchange="renderGrid()" class="right" style="width:230px"></select></div>
+<div class="hint" style="margin:12px 0">각 길드원에게 <b>1타·2타·3타 칸</b>이 한 줄로 붙어 있어. 입력하고 아래 <b>전체 저장</b> 한 번만 누르면 돼. 안 친 사람은 비워두면 자동으로 미참여 처리돼.</div>
+<div class="card" style="background:#11161f;margin-bottom:10px">
+<label>🔎 길드원 검색</label>
+<input id="memberSearch" placeholder="닉네임 입력해서 찾기" oninput="filterMembersInAttack()" style="max-width:420px">
+</div>
+
+
+<div class="card nikke-import-card" style="background:#11161f;margin:10px 0">
+  <div class="row">
+    <div>
+      <h3 style="margin:0">🔄 NIKKE 유레 자동 동기화</h3>
+      <div class="small muted">길드원 · 길드정보 · 현재 회차 · 유레 공격기록을 한 번에 가져와 지금 만든 양식에 맞춰 넣어.</div>
+    </div>
+    <div class="right">
+      <button class="primary" onclick="pasteNikkeSync()">📋 NIKKE 데이터 가져오기</button>
+      <button onclick="document.getElementById('nikkeFile').click()">파일</button>
+      <input id="nikkeFile" type="file" accept=".json,.txt" class="hiddenInput">
+    </div>
+  </div>
+  <div class="small muted" style="margin-top:8px">
+    NIKKE 페이지에서 유레 데이터를 캡처한 뒤 버튼을 누르면, <b>길드원 목록 / 식별자 / 레벨 / 레이드 / 딜 / 보스 / 단계 / 막타 / 5캐릭터 / 캐릭터 자리·돌파 / 싱크로 레벨</b>을 자동 반영해.
+  </div>
+  <textarea id="nikkePaste" rows="5" placeholder="USERJS가 복사한 NIKKE 전체 동기화 JSON을 붙여넣거나 파일로 불러와."></textarea>
+  <div id="nikkeImportResult" class="hint" style="margin-top:8px">아직 동기화하지 않았어.</div>
+</div>
+<div id="attackGrid" class="preset"></div>
+<div class="row" style="margin-top:12px"><button class="primary" onclick="saveGrid()">💾 이 회차 전체 저장</button><button onclick="clearGrid()">입력칸 비우기</button></div></div>
+<div class="card"><h2>📋 더 빠른 방법 — 표 붙여넣기</h2><p class="muted">다른 곳에서 정리한 데이터를 탭으로 구분해서 붙여넣으면 돼. <b>닉네임 / 1타딜 / 1타레벨 / 2타딜 / 2타레벨 / 3타딜 / 3타레벨</b> 순서.</p><textarea id="pasteBox" rows="7" placeholder="미진&#9;12.3&#9;400&#9;15.2&#9;400&#9;18.1&#9;401&#10;길드원2&#9;..."></textarea><div class="row" style="margin-top:8px"><button onclick="applyPaste()">붙여넣은 데이터 적용</button><span class="muted small">닉네임이 현재 길드원과 일치하면 자동으로 찾아서 칸에 넣어줌.</span></div></div>
+</section>
+
+<section id="members" class="hidden">
+<div class="card"><h2>길드원은 언제든 자유롭게 변경</h2><div class="muted">32명 고정이 아니야. 추가/삭제/닉네임 변경 모두 가능하고, 기존 레이드 기록은 그대로 보존돼.</div>
+<div class="form" style="margin-top:12px"><div class="wide"><label>새 길드원 여러 명</label><textarea id="bulk" rows="5" placeholder="닉네임1&#10;닉네임2&#10;닉네임3"></textarea></div><div style="align-self:end"><button class="primary" onclick="bulkMembers()">여러 명 추가</button></div></div></div>
+<div class="card"><h2>현재 길드원</h2><div id="memberList"></div></div>
+</section>
+
+<section id="bosses" class="hidden">
+<div class="card">
+<h2>⚔️ 보스 정보 관리</h2>
+<p class="muted">
+니케 레이드처럼 <b>속성 약점과 보스 이름을 따로 관리</b>해.
+같은 보스도 회차에 따라 약점이 바뀔 수 있으므로 <b>보스 이름 + 약점 조합</b>을 각각 등록할 수 있어.
+</p>
+<div class="hint" style="margin:10px 0">
+예시: <b>토커티브 / 작열</b>, <b>토커티브 / 철갑</b>을 둘 다 등록 가능.<br>
+공격 입력에서는 <b>약점 속성을 먼저 선택 → 그 속성으로 등록된 보스만 선택</b>하게 돼.
+</div>
+<div class="card" style="background:#11161f">
+<h3 style="margin-top:0">여러 보스 한꺼번에 등록</h3>
+<p class="muted">한 줄에 <b>보스이름[TAB]보스속성</b> 형식. 약점은 자동으로 계산해.</p>
+<textarea id="bossPaste" rows="8" placeholder="토커티브	수냉
+토커티브	전격
+그레이브 디거	철갑
+블랙 스미스	풍압"></textarea>
+<div class="row" style="margin-top:8px">
+<button class="primary" onclick="importBosses()">보스 정보 일괄 등록</button>
+<button onclick="document.getElementById('bossFile').click()">CSV/TXT 파일 불러오기</button>
+<input id="bossFile" type="file" accept=".csv,.txt" class="hiddenInput">
+</div>
+</div>
+<div class="form">
+<div><label>보스 이름</label><input id="newBossName" placeholder="예: 토커티브"></div>
+<div><label>보스 속성</label><select id="newBossAttr"><option>수냉</option><option>전격</option><option>철갑</option><option>풍압</option><option>작열</option></select></div>
+<div style="align-self:end"><button class="primary" onclick="addBoss()">보스 추가</button></div>
+</div>
+</div>
+<div class="card"><h2>등록된 보스 정보</h2><div id="bossList"></div></div>
+</section>
+<section id="stats" class="hidden">
+<div class="card"><div class="row"><h2 style="margin:0">📊 개인 통계 조회</h2><select id="publicStatsMember" onchange="setPublicMember(this.value)" style="width:260px"><option value="">길드원 선택</option></select></div><div class="small muted">길드원 누구든 선택해서 개인 통계를 볼 수 있어.</div></div>
+<div class="card">
+  <div class="row"><h2>📊 길드 통계</h2><select id="statsRaid" onchange="renderStats()" style="width:240px"></select></div>
+  <div class="stats-grid">
+    <div class="stat"><span class="muted">총 딜량</span><b id="stTotal">0억</b></div>
+    <div class="stat"><span class="muted">참여 인원</span><b id="stParticipants">0명</b></div>
+    <div class="stat"><span class="muted">미참여</span><b id="stAbsent">0명</b></div>
+    <div class="stat"><span class="muted">막타</span><b id="stLast">0회</b></div>
+    <div class="stat"><span class="muted">평균 딜/공격</span><b id="stAvg">0억</b></div>
+    <div class="stat"><span class="muted">경고 누적</span><b id="stWarnings">0회</b></div>
+  </div>
+</div>
+
+<div class="stats-two-col">
+  <div class="card"><h3>👑 길드원 딜량</h3><div id="statsDamage"></div></div>
+  <div class="card"><h3>📈 개인 성장</h3>
+    <div class="form stats-filter">
+      <div><label>길드원</label><select id="statsMember" onchange="renderStatsGrowth()"></select></div>
+      <div><label>비교 항목</label><select id="statsGrowthMetric" onchange="renderStatsGrowth()"><option value="damage">총 딜량</option><option value="level">레벨</option><option value="avg">공격당 평균 딜</option></select></div>
+    </div>
+    <div id="statsGrowth" class="chartbox"></div>
+  </div>
+</div>
+
+<div class="stats-two-col">
+  <div class="card"><h3>⚔️ 보스·약점별 딜</h3><div id="statsBoss"></div></div>
+  <div class="card"><h3>🥇 길드원 기여도</h3><div id="statsContribution"></div></div>
+</div>
+
+<div class="card"><h3>📊 레이드 전체 성장 추이</h3><div id="statsRaidTrend" class="chartbox"></div></div>
+</section>
+<section id="meetups" class="hidden">
+<div class="card">
+  <h2>🐶 정모</h2>
+  <div class="meetup-searchbar">
+    <input id="meetupSearchDate" placeholder="날짜 검색 · 예: 260809" oninput="renderMeetups()">
+    <input id="meetupSearchMember" placeholder="참여자 검색 · 닉네임" oninput="renderMeetups()">
+    <button onclick="clearMeetupSearch()">검색 초기화</button>
+  </div>
+</div>
+
+<div class="card">
+  <h2>새 정모 기록</h2>
+  <div class="form meetup-form">
+    <div>
+      <label>정모 날짜</label>
+      <input id="meetupDate6" maxlength="6" inputmode="numeric" placeholder="260809">
+      <div class="small muted">YYMMDD 형식으로 입력 · 260809 → 2026년 8월 9일</div>
+    </div>
+    <div>
+      <label>제목</label>
+      <input id="meetupTitle" placeholder="예: 8월 강아지 정모">
+    </div>
+    <div style="grid-column:1/-1">
+      <label>참여자</label>
+      <div id="participantChips" class="participant-chips"></div>
+      <input id="participantSearch" placeholder="@닉네임을 입력해서 참여자 태그 추가" oninput="participantAutocomplete()" autocomplete="off">
+      <div id="participantSuggestions" class="mention-suggestions hidden"></div>
+    </div>
+  </div>
+
+  <div class="diary-toolbar">
+    <button onclick="focusDiary()">텍스트</button>
+    <button onclick="insertDiaryImage()">📷 사진 넣기</button>
+    <button onclick="insertDiaryDivider()">— 구분선</button>
+  </div>
+
+  <div id="diaryEditor" class="diary-editor" contenteditable="true"
+       data-placeholder="여기에 일기를 써줘.
+
+사진을 넣고 싶으면 커서를 원하는 위치에 놓고 [📷 사진 넣기]를 눌러.
+사진 아래에도 글을 이어서 쓸 수 있어."></div>
+
+  <div class="row" style="margin-top:12px">
+    <button class="primary" onclick="saveMeetupEditor()">🐶 정모 일지 저장</button>
+    <button onclick="clearMeetupEditor()">새로 쓰기</button>
+  </div>
+</div>
+
+<div id="meetupList"></div>
+</section>
+<section id="warnings" class="hidden">
+<div class="card">
+<h2>⚠️ 경고 누적 관리</h2>
+<p class="muted">레이드 미참여는 자동으로 <b>「레이드 미참여」</b> 사유로 경고 1회가 누적되고, 나머지 경고는 사유를 직접 입력해서 추가/차감할 수 있어.</p>
+<div class="hint">예: 실수로 경고를 잘못 눌렀으면 <b>-1</b>, 별도로 경고를 추가해야 하면 <b>+1</b>을 누르면 돼. 숫자를 직접 입력해서 원하는 누적 횟수로 맞추는 것도 가능해.</div>
+<div id="warningList" style="margin-top:12px"></div>
+<div class="card" style="background:#11161f;margin-top:14px"><h3>경고 이력</h3><div id="warningHistory"></div></div>
+</div></section>
+<section id="history" class="hidden">
+<div class="card"><div class="row"><h2>🐶 개인 전적 조회</h2><select id="publicMemberPick" onchange="setPublicMember(this.value)" style="width:260px"><option value="">길드원 선택</option></select></div><div class="small muted">길드원 누구든 선택해서 해당 사람의 기록을 볼 수 있어.</div></div><div class="card"><div class="form"><div><label>길드원</label><select id="hm" onchange="renderHistory()"></select></div><div><label>그래프</label><select id="metric" onchange="renderHistory()"><option value="damage">레이드 총 딜량</option><option value="level">평균 레벨</option><option value="avg">공격당 평균 딜</option></select></div></div></div>
+<div class="card"><h2>📈 개인 성장 추이</h2><div id="line" class="chartbox"></div><div id="person"></div></div><div class="card"><h2>상세 기록</h2><div id="ht"></div></div></section>
+</div>
+
+<script>
+const KEY='guildRaidTrackerV2';
+const SUPABASE_URL='https://cnieacagqygkizcrfanj.supabase.co';
+const SUPABASE_KEY='sb_publishable_Snq-sn3BqzRS-GJpts8NfA_5mzNUvkz';
+const ADMIN_FN_URL='https://cnieacagqygkizcrfanj.supabase.co/functions/v1/guild-raid-admin';
+const SUPABASE_ROW=1;
+let db=JSON.parse(localStorage.getItem(KEY)||'{"members":[],"raids":[],"records":[],"bosses":[],"warningEvents":[],"meetups":[]}');
+let sharedSaving=false, sharedTimer=null, adminPassword=sessionStorage.getItem('guild_admin_password')||'';
+
+function isAdmin(){return !!adminPassword;}
+async function verifyAdminPassword(pwd){
+  try{
+    const r=await fetch(ADMIN_FN_URL,{method:'POST',headers:{'Content-Type':'application/json','x-admin-password':pwd},body:JSON.stringify({action:'read'})});
+    return r.ok && (await r.json()).ok===true;
+  }catch(e){return false;}
+}
+async function adminLogin(){
+  const p=prompt('관리자 비밀번호를 입력해줘.');
+  if(p===null)return;
+  if(!(await verifyAdminPassword(p)))return alert('비밀번호가 틀렸어.');
+  adminPassword=p;sessionStorage.setItem('guild_admin_password',p);
+  applyAccessMode();setSharedStatus('👑 관리자 모드');
+}
+function adminLogout(){adminPassword='';sessionStorage.removeItem('guild_admin_password');applyAccessMode();setSharedStatus('👀 조회 모드');}
+function setSharedStatus(t){const el=document.getElementById('sharedStatus');if(el)el.textContent=t;}
+
+async function loadSharedData(){
+  try{
+    const r=await fetch(`${SUPABASE_URL}/rest/v1/guild_raid_state?id=eq.${SUPABASE_ROW}&select=data,updated_at`,{headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}});
+    if(!r.ok)throw new Error('공용 DB 읽기 실패 '+r.status);
+    const rows=await r.json();
+    if(rows[0]?.data){db=rows[0].data;localStorage.setItem(KEY,JSON.stringify(db));}
+    window.__sharedStamp=rows[0]?.updated_at||'';
+    refresh();subscribeSharedData();applyAccessMode();setSharedStatus(isAdmin()?'👑 관리자 모드':'👀 조회 모드');
+  }catch(e){console.warn(e);refresh();applyAccessMode();setSharedStatus('⚠ 공용 DB 연결 실패');}
+}
+async function pushSharedData(){
+  if(!isAdmin()||sharedSaving)return false;
+  sharedSaving=true;
+  try{
+    const r=await fetch(ADMIN_FN_URL,{method:'POST',headers:{'Content-Type':'application/json','x-admin-password':adminPassword},body:JSON.stringify({action:'save',data:db})});
+    if(!r.ok)throw new Error('공용 DB 저장 실패 '+r.status);
+    return true;
+  }catch(e){console.warn('[공용 DB 저장]',e);return false;}
+  finally{sharedSaving=false;}
+}
+function save(){
+  localStorage.setItem(KEY,JSON.stringify(db));refresh();
+  if(!isAdmin()){alert('조회 모드에서는 수정할 수 없어. 관리자 로그인해줘.');return;}
+  clearTimeout(sharedTimer);sharedTimer=setTimeout(()=>pushSharedData(),150);
+}
+function subscribeSharedData(){
+  if(window.__sharedPolling)return;
+  window.__sharedPolling=setInterval(async()=>{
+    if(sharedSaving)return;
+    try{
+      const r=await fetch(`${SUPABASE_URL}/rest/v1/guild_raid_state?id=eq.${SUPABASE_ROW}&select=data,updated_at`,{headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}});
+      const rows=await r.json(),incoming=rows[0]?.data,stamp=rows[0]?.updated_at||'';
+      if(incoming&&stamp!==window.__sharedStamp){window.__sharedStamp=stamp;db=incoming;localStorage.setItem(KEY,JSON.stringify(db));refresh();}
+    }catch(e){}
+  },3000);
+}
+
+const bosses=[['보스 1','작열'],['보스 2','철갑'],['보스 3','수냉'],['보스 4','풍압'],['보스 5','전격']];
+const $=id=>document.getElementById(id);
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2)}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function tab(id){document.querySelectorAll('section').forEach(x=>x.classList.add('hidden'));$(id).classList.remove('hidden');refresh()}
+function raid(id){return db.raids.find(x=>x.id===id)}
+function mname(id){return db.members.find(x=>x.id===id)?.name||'(삭제된 길드원)'}
+function refresh(){
+ $('dRaids').textContent=db.raids.length;$('dMembers').textContent=db.members.length;
+ let opts=db.raids.map(r=>`<option value="${r.id}">${esc(r.no)}${r.memo?' · '+esc(r.memo):''}</option>`).join('');
+ ['dashRaid','inputRaid'].forEach(id=>{let e=$(id),old=e.value;e.innerHTML=opts;if(db.raids.some(r=>r.id===old))e.value=old});
+ $('hm').innerHTML='<option value="">선택</option>'+db.members.map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join('');
+ populatePublicMemberPickers();renderDash();renderGrid();renderMembers();renderBosses();renderWarnings();renderHistory();renderBossCompare();renderStats();renderMeetups();filterMembersInAttack();
+}
+function makeRaid(){
+ let no=$('raidNo').value.trim();
+ if(!no)return alert('레이드 회차/이름을 입력해줘.');
+ if(db.raids.some(r=>String(r.no).toLowerCase()===no.toLowerCase()))return alert('같은 이름의 레이드가 이미 있어.');
+ db.raids.push({id:uid(),no,memo:$('raidMemo').value.trim()});
+ $('raidNo').value='';$('raidMemo').value='';save();
+}
+function bulkMembers(){let names=$('bulk').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);let set=new Set(db.members.map(m=>m.name));let n=0;for(let name of names){if(!set.has(name)){db.members.push({id:uid(),name});set.add(name);n++}}$('bulk').value='';save();alert(`${n}명 추가했어.`)}
+function rename(id){let m=db.members.find(x=>x.id===id);let n=prompt('새 닉네임',m.name);if(n&&n.trim()&&n.trim()!==m.name){if(db.members.some(x=>x.id!==id&&x.name===n.trim()))return alert('이미 같은 닉네임이 있어.');m.name=n.trim();save()}}
+function removeMember(id){if(confirm(`${mname(id)}을(를) 현재 길드원 목록에서 삭제할까?\n기존 레이드 기록은 보존돼.`)){db.members=db.members.filter(m=>m.id!==id);save()}}
+function renderMembers(){$('memberList').innerHTML='<table><tr><th>#</th><th>닉네임</th><th>관리</th></tr>'+db.members.map((m,i)=>`<tr><td>${i+1}</td><td>${esc(m.name)}</td><td><button onclick="rename('${m.id}')">닉네임 변경</button> <button onclick="removeMember('${m.id}')">삭제</button></td></tr>`).join('')+'</table>'}
+function attackHTML(rid,slot,rec){
+ let bosses=allBosses(), oldBoss=rec?.bossName||'', oldAttr=rec?.bossAttr||bosses.find(x=>x.name===oldBoss)?.attr||attrs[0];
+ let attrOpts=attrs.map(a=>`<option ${a===oldAttr?'selected':''}>${a}</option>`).join('');
+ let filtered=bosses.filter(x=>x.attr===oldAttr);
+ let bossOpts=filtered.map(x=>`<option ${x.name===oldBoss?'selected':''}>${esc(x.name)}</option>`).join('');
+ let chars=Array.isArray(rec?.chars)?rec.chars:[];
+ return `<div class="attack ${rec?'done':''}">
+ <div class="num">${slot}타</div>
+ <div class="mini">
+  <select class="full" data-f="${slot}-attr" onchange="filterBossSelect(this)">${attrOpts}</select>
+  <div class="attr-wheel full" data-wheel-for="${slot}">${oldAttr}>>${weakOf(oldAttr)}</div>
+  <select class="full" data-f="${slot}-bossname">${bossOpts}</select>
+  <input class="full" data-f="${slot}-damage" type="number" step="0.01" value="${rec?.damage??''}" placeholder="딜(억)">
+  <div style="grid-column:span 2;display:grid;grid-template-columns:repeat(5,1fr);gap:4px">
+   ${[0,1,2,3,4].map(i=>`<input data-f="${slot}-char${i}" title="${rec?.slots?.[i]?`자리 ${rec.slots[i].slot||i+1} · 돌파 ${rec.slots[i].break??'-'}`:''}" value="${esc(chars[i]??'')}" placeholder="캐릭터${i+1}">`).join('')}
+  </div>
+  <label class="full lastlabel"><input class="check" type="checkbox" data-f="${slot}-last" ${rec?.last?'checked':''}> 막타
+  <button type="button" class="warnbtn ${rec?.warn?'active':''}" onclick="toggleWarn(this)">${rec?.warn?'⚠️ 경고 선택됨':'⚠️ 경고'}</button></label>
+ </div></div>`;
+}
+function filterBossSelect(sel){
+ let attack=sel.closest('.attack'), attr=sel.value;
+ let opts=allBosses().filter(x=>x.attr===attr);
+ let bsel=attack.querySelector('select[data-f$="-bossname"]');
+ bsel.innerHTML=opts.map(x=>`<option>${esc(x.name)}</option>`).join('');
+ let slot=sel.dataset.f.split('-')[0];
+ let wheel=attack.querySelector(`[data-wheel-for="${slot}"]`);
+ if(wheel)wheel.textContent=attr+'>>'+weakOf(attr);
+}
+function toggleWarn(btn){btn.classList.toggle('active');btn.textContent=btn.classList.contains('active')?'⚠️ 경고 선택됨':'⚠️ 경고';}
+
+
+function nikkePick(o,keys){
+ for(const k of keys){
+   if(o==null) continue;
+   if(k.includes('.')){
+     let v=o;
+     for(const p of k.split('.')){ if(v==null)break; v=v[p]; }
+     if(v!==undefined && v!==null && v!=='')return v;
+   }else if(o[k]!==undefined && o[k]!==null && o[k]!=='') return o[k];
+ }
+ return null;
+}
+function normalizeAttr(v){
+ const x=String(v||'').trim();
+ const m={'수냉':'수냉','P.S.I.D.':'수냉','전격':'전격','Z.E.U.S.':'전격','철갑':'철갑','D.M.T.R.':'철갑','풍압':'풍압','A.N.M.I.':'풍압','작열':'작열','H.S.T.A.':'작열'};
+ return m[x]||x;
+}
+function weakOf(attr){return {'수냉':'전격','전격':'철갑','철갑':'풍압','풍압':'작열','작열':'수냉'}[attr]||'';}
+const raidAttrTokens={'수냉':['P.S.I.D.','수냉'],'전격':['Z.E.U.S.','전격'],'철갑':['D.M.T.R.','철갑'],'풍압':['A.N.M.I.','풍압'],'작열':['H.S.T.A.','작열']};
+function inferBossAttr(name){
+ const str=String(name||'');
+ for(const [attr,tokens] of Object.entries(raidAttrTokens)) if(tokens.some(t=>str.includes(t))) return attr;
+ return '';
+}
+function getMemberRows(payload){
+ const raw=payload?.members;
+ if(Array.isArray(raw))return raw;
+ if(Array.isArray(raw?.data?.items))return raw.data.items;
+ if(Array.isArray(raw?.items))return raw.items;
+ return [];
+}
+function getCharacterMaster(payload){
+ let raw=payload?.characterMaster||payload?.nikkeMaster;
+ if(Array.isArray(raw)) return raw;
+ if(Array.isArray(raw?.data)) return raw.data;
+ return [];
+}
+function buildCharacterMap(payload){
+ const map={};
+ getCharacterMaster(payload).forEach(x=>{
+   if(x && x.id!=null && x.name_localkey?.name) map[String(Math.floor(+x.id/100))]=x.name_localkey.name;
+   if(x && x.id!=null && x.name) map[String(Math.floor(+x.id/100))]=x.name;
+ });
+ return map;
+}
+function getRaidRows(payload){
+ if(Array.isArray(payload?.raid)) return payload.raid;
+ if(Array.isArray(payload?.raid?.data?.participate_data)) return payload.raid.data.participate_data;
+ if(Array.isArray(payload?.participate_data)) return payload.participate_data;
+ if(Array.isArray(payload?.data?.participate_data)) return payload.data.participate_data;
+ return [];
+}
+function deriveRound(payload){
+ if(payload?.raidNum)return String(payload.raidNum);
+ const sid=Number(payload?.seasonId||payload?.seasonInfo?.data?.manager_info?.id||0);
+ if(sid>=1000001 && sid<1001000)return String(sid-1000000);
+ return '';
+}
+function decodeRaidRecord(o, nameMap={}){
+ const bossRaw=nikkePick(o,['boss_name','name_localvalues.ko','boss','name'])||'';
+ const cleanBoss=String(bossRaw).replace(/\[.*?\]/g,'').trim();
+ const bossAttr=normalizeAttr(o.bossAttr||o.boss_attr||o.attribute||o.element||inferBossAttr(bossRaw));
+ const squad=Array.isArray(o.squad)?[...o.squad].sort((a,b)=>(+a.slot||0)-(+b.slot||0)):[];
+ const chars=squad.slice(0,5).map(u=>nameMap[String(Math.floor((+u.tid||0)/100))] || String(u.name||u.character_name||u.tid||''));
+ const maxLv=Math.max(0,...squad.map(u=>+u.lv||0));
+ return {
+   nickname:String(o.nickname||o.member_name||o.user_name||'').trim(),
+   openid:o.openid!=null?String(o.openid):'',
+   damage:+(o.total_damage||o.damage||o.dmg||0),
+   bossName:cleanBoss,
+   bossAttr,
+   bossWeak:weakOf(bossAttr),
+   bossLevel:+(o.level||0),
+   level:maxLv,
+   chars,
+   slots:squad.slice(0,5).map(u=>({slot:+u.slot||0,tid:u.tid,break:(+u.tid%100)-1})),
+   last:!!(o.is_final_hit||o.final_hit),
+   difficulty:+(o.difficulty||1),
+   step:o.step!=null?o.step:1,
+   hitNo:o.hit_no||o.attack_no||o.attack_index||0
+ };
+}
+function ensureMemberFromApi(m){
+ const name=String(m.nickname||'').trim(); if(!name)return null;
+ const apiId=String(m.member_id||m.openid||m.id||'');
+ let found=db.members.find(x=>apiId && x.apiId===apiId) || db.members.find(x=>x.name===name);
+ if(!found){found={id:uid(),name};db.members.push(found);}
+ found.name=name; if(apiId)found.apiId=apiId;
+ if(m.synchro_level!=null)found.level=+m.synchro_level||found.level||0;
+ if(m.icon_id!=null)found.iconId=m.icon_id;
+ if(m.commander_level!=null)found.commanderLevel=+m.commander_level||0;
+ found.active=true;found.lastApiSync=new Date().toISOString();
+ return found;
+}
+function ensureRaidForImport(label){
+ let name=String(label||'').trim();
+ if(!name)return null;
+ let r=db.raids.find(x=>String(x.no).toLowerCase()===name.toLowerCase());
+ if(!r){r={id:uid(),no:name,memo:'NIKKE API 자동 동기화',source:'nikke-api'};db.raids.push(r);}
+ return r;
+}
+function pasteNikkeSync(){
+ navigator.clipboard?.readText?.().then(t=>{
+   if(!t)return alert('클립보드에 NIKKE 데이터가 없어.');
+   $('nikkePaste').value=t;importNikkeSync();
+ }).catch(()=>alert('클립보드 접근이 막혔어. JSON을 직접 붙여넣어줘.'));
+}
+function importNikkeSync(){
+ const text=$('nikkePaste').value.trim(); if(!text)return alert('NIKKE 동기화 JSON을 넣어줘.');
+ let payload;
+ try{payload=JSON.parse(text);}catch(e){return alert('JSON 형식이 아니야. NIKKE 브리지에서 복사한 데이터를 사용해줘.');}
+ const members=getMemberRows(payload).map(ensureMemberFromApi).filter(Boolean);
+ const raidsRaw=getRaidRows(payload).filter(x=>(+x.difficulty||2)===2);
+ const roundLabel=deriveRound(payload);
+ const targetRaid=ensureRaidForImport(roundLabel?`유레 ${roundLabel}차`:'NIKKE 유레');
+ const nameMap=buildCharacterMap(payload);
+ if(!targetRaid)return alert('레이드 회차를 만들지 못했어.');
+ // Update/create bo ss definitions from API observation. Same boss+attribute can coexist.
+ let addedRecords=0,matched=0;
+ // Avoid duplicating the same API raid on repeated syncs.
+ const existingKeys=new Set(db.records.filter(r=>r.raid===targetRaid.id).map(r=>[r.member,r.hit,r.bossName,r.damage,r.step].join('|')));
+ const grouped={};
+ raidsRaw.map(x=>decodeRaidRecord(x,nameMap)).filter(x=>x.nickname).forEach(r=>(grouped[r.nickname]??=[]).push(r));
+ Object.values(grouped).forEach(list=>list.sort((a,b)=>((a.hitNo||99)-(b.hitNo||99))));
+ for(const [nick,list] of Object.entries(grouped)){
+   const mem=db.members.find(m=>m.name===nick);
+   if(!mem)continue; matched++;
+   const level=Math.max(0,...list.map(x=>x.level||0));if(level)mem.level=level;
+   list.slice(0,3).forEach((r,i)=>{
+     const hit=i+1;
+     const key=[mem.id,hit,r.bossName,r.damage,r.step].join('|');
+     if(existingKeys.has(key))return;
+     db.records.push({
+       id:uid(),raid:targetRaid.id,member:mem.id,hit,bossName:r.bossName,bossAttr:r.bossAttr,
+       weak:r.bossWeak,damage:r.damage,level:level,chars:r.chars,last:r.last,warn:false,
+       bossLevel:r.bossLevel,step:r.step,difficulty:r.difficulty,openid:r.openid,slots:r.slots,
+       source:'nikke-api'
+     });existingKeys.add(key);addedRecords++;
+   });
+ }
+ // Add boss definitions without deleting user's manual ones.
+ allBosses();
+ raidsRaw.map(x=>decodeRaidRecord(x,nameMap)).forEach(r=>{
+   if(!r.bossName||!r.bossAttr)return;
+   if(!db.bosses.some(b=>b.name===r.bossName&&b.attr===r.bossAttr))db.bosses.push({name:r.bossName,attr:r.bossAttr,weak:r.bossWeak});
+ });
+ save();
+ $('nikkeImportResult').innerHTML=`✅ 동기화 완료<br>길드원 ${members.length}명 · 매칭 ${matched}명 · 공격 기록 ${addedRecords}건 · ${esc(targetRaid.no)}`;
+}
+function renderGrid(){
+ let rid=$('inputRaid').value;
+ if(!rid){$('attackGrid').innerHTML='<div class="hint">먼저 레이드 회차를 만들어줘.</div>';return}
+ $('attackGrid').innerHTML=(isRaidClosed(rid)?'<div class="hint" style="margin-bottom:10px">🔒 이 회차는 마감됐어. 기록은 확인만 가능하고 수정 저장은 막혀 있어.</div>':'')+db.members.map((m,i)=>{
+   let rs=db.records.filter(x=>x.raid===rid&&x.member===m.id);
+   let total=rs.reduce((a,x)=>a+x.damage,0);
+   return `<div class="member-card" data-mid="${m.id}">
+     <div class="member-head"><span class="idx">${String(i+1).padStart(2,'0')}</span><span class="name">${esc(m.name)}</span><input data-member-level type="number" value="${m.level??''}" placeholder="레벨" style="width:90px"><span class="summary">${total?`현재 ${total.toFixed(2)}억`:'미입력'}</span></div>
+     <div class="attack-row">
+       ${attackHTML(rid,1,rs.find(x=>x.hit===1))}
+       ${attackHTML(rid,2,rs.find(x=>x.hit===2))}
+       ${attackHTML(rid,3,rs.find(x=>x.hit===3))}
+     </div>
+   </div>`;
+ }).join('');
+}
+function saveGrid(){
+ let rid=$('inputRaid').value;if(!rid)return alert('레이드를 선택해줘.');if(isRaidClosed(rid))return alert('마감된 회차는 수정할 수 없어.');
+ db.records=db.records.filter(x=>x.raid!==rid);
+ document.querySelectorAll('.member-card').forEach(card=>{
+   let mid=card.dataset.mid, m=db.members.find(x=>x.id===mid);
+   let lv=+(card.querySelector('[data-member-level]')?.value||0); if(m && lv)m.level=lv;
+   for(let slot=1;slot<=3;slot++){
+     let damage=+(card.querySelector(`[data-f="${slot}-damage"]`)?.value||0);
+     let chars=[0,1,2,3,4].map(i=>card.querySelector(`[data-f="${slot}-char${i}"]`)?.value.trim()||'');
+     let warn=card.querySelector('.warnbtn')?.classList.contains('active');
+     let last=card.querySelector(`[data-f="${slot}-last"]`)?.checked||false;
+     if(!damage && !chars.some(Boolean) && !last && !warn)continue;
+     db.records.push({id:uid(),raid:rid,member:mid,hit:slot,bossName:card.querySelector(`[data-f="${slot}-bossname"]`)?.value||'',bossAttr:card.querySelector(`[data-f="${slot}-attr"]`)?.value||'',weak:weakOf(card.querySelector(`[data-f="${slot}-attr"]`)?.value||''),damage,level:lv,chars,last,warn});
+   }
+ });
+ save();alert('이 회차 전체 기록 저장 완료!');
+}
+function clearGrid(){
+ document.querySelectorAll('#attackGrid input').forEach(x=>{
+   if(x.type==='checkbox')x.checked=false;else x.value='';
+ });
+}
+function applyPaste(){
+ let rid=$('inputRaid').value;if(!rid)return alert('먼저 회차를 선택해줘.');
+ let lines=$('pasteBox').value.trim().split(/\r?\n/).filter(Boolean);
+ let map=new Map(db.members.map(m=>[m.name,m]));let count=0;
+ for(let line of lines){
+   let a=line.split('\t'),m=map.get((a[0]||'').trim());if(!m)continue;
+   let card=document.querySelector(`.member-card[data-mid="${m.id}"]`);if(!card)continue;
+   [[1,1,2],[2,3,4],[3,5,6]].forEach(([slot,di,li])=>{
+     if(a[di])card.querySelector(`[data-f="${slot}-damage"]`).value=a[di];
+     if(a[li])card.querySelector('[data-member-level]').value=a[li];
+   });
+   count++;
+ }
+ $('pasteBox').value='';
+ alert(`${count}명 데이터를 입력칸에 적용했어. 마지막으로 "이 회차 전체 저장"만 눌러줘.`);
+}
+function weakOf(attr){ return {'수냉':'전격','전격':'철갑','철갑':'풍압','풍압':'작열','작열':'수냉'}[attr]||''; }
+function attrDisplay(attr){ return attr+'>>'+weakOf(attr); }
+
+function allBosses(){
+ if(!db.bosses) db.bosses=[
+  {name:'토커티브',attr:'수냉'},
+  {name:'토커티브',attr:'철갑'}
+ ];
+ db.bosses.forEach(b=>{
+   if(!b.attr && b.weak){
+     const reverse={'전격':'수냉','철갑':'전격','풍압':'철갑','작열':'풍압','수냉':'작열'};
+     b.attr=reverse[b.weak]||b.weak;
+   }
+   b.weak=weakOf(b.attr);
+ });
+ return db.bosses;
+}
+function addBoss(){
+ let name=$('newBossName').value.trim(),attr=$('newBossAttr').value;
+ if(!name)return alert('보스 이름을 입력해줘.');
+ allBosses().push({name,attr,weak:weakOf(attr)});
+ $('newBossName').value='';
+ save();
+}
+function importBosses(){
+ let lines=$('bossPaste').value.trim().split(/\r?\n/).map(x=>x.trim()).filter(Boolean),n=0;
+ for(let line of lines){
+   let a=line.split(/\t|,/).map(x=>x.trim()); if(a.length<2)continue;
+   let attr=a[1];
+   if(!attrs.includes(attr))continue;
+   allBosses().push({name:a[0],attr,weak:weakOf(attr)});n++;
+ }
+ $('bossPaste').value='';save();alert(`${n}개의 보스 정보를 등록했어.`);
+}
+function deleteBoss(i){if(confirm('이 보스 속성 조합을 삭제할까? 기존 기록은 보존돼.')){allBosses().splice(i,1);save()}}
+function renderBosses(){
+ let groups={};allBosses().forEach((b,i)=>(groups[b.attr]??=[]).push({...b,i}));
+ $('bossList').innerHTML=Object.entries(groups).map(([attr,arr])=>`
+ <div class="card" style="background:#11161f">
+   <h3>${attrDisplay(attr)} <span class="muted">· ${esc(attr)} 보스 / ${esc(weakOf(attr))} 약점</span></h3>
+   <table><tr><th>보스 이름</th><th>속성·약점</th><th></th></tr>
+   ${arr.map(b=>`<tr><td>${esc(b.name)}</td><td><span class="pill">${b.attr}>>${weakOf(b.attr)}</span></td><td><button onclick="deleteBoss(${b.i})">삭제</button></td></tr>`).join('')}
+   </table>
+ </div>`).join('');
+}
+function deleteRaid(){let rid=$('inputRaid').value;if(!rid)return alert('삭제할 회차를 선택해줘.');let r=raid(rid);if(confirm(`${esc(r.no)}와 모든 기록을 삭제할까?`)){db.raids=db.raids.filter(x=>x.id!==rid);db.records=db.records.filter(x=>x.raid!==rid);save()}}
+
+function setPublicMember(id){
+ if(!id)return;
+ ['publicMemberPick','publicStatsMember','hm','statsMember'].forEach(k=>{const el=document.getElementById(k);if(el)el.value=id;});
+ renderHistory();renderStatsGrowth();
+}
+function populatePublicMemberPickers(){
+ const opts='<option value="">길드원 선택</option>'+db.members.map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join('');
+ ['publicMemberPick','publicStatsMember','hm','statsMember'].forEach(id=>{
+   const el=document.getElementById(id);if(!el)return;
+   const old=el.value;el.innerHTML=opts;if(db.members.some(m=>m.id===old))el.value=old;
+ });
+}
+function applyAccessMode(){
+ document.querySelectorAll('.adminOnlyTab').forEach(b=>b.classList.toggle('hidden',!isAdmin()));
+ const lo=document.getElementById('adminLogoutBtn');if(lo)lo.classList.toggle('hidden',!isAdmin());
+ if(!isAdmin()){
+   ['input','members','bosses','warnings'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.add('hidden');});
+   ['dash','history','stats','meetups'].forEach(id=>{const el=document.getElementById(id);if(el&&!document.querySelector(`.tab-btn-active[data-tab="${id}"]`)){}});
+ }
+}
+function renderStats(){
+ let opts=db.raids.map(r=>`<option value="${r.id}">${esc(r.no)}${r.memo?' · '+esc(r.memo):''}</option>`).join('');
+ let sel=$('statsRaid'),old=sel.value;sel.innerHTML=opts;if(db.raids.some(r=>r.id===old))sel.value=old;else if(db.raids.length)sel.value=db.raids.at(-1).id;
+ $('statsMember').innerHTML='<option value="">선택</option>'+db.members.map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join('');
+ renderStatsGrowth();
+ if(!sel.value){
+   $('stTotal').textContent='0억';$('stParticipants').textContent='0명';$('stAbsent').textContent='0명';$('stLast').textContent='0회';$('stAvg').textContent='0억';$('stWarnings').textContent='0회';
+   $('statsDamage').innerHTML=$('statsContribution').innerHTML=$('statsBoss').innerHTML=$('statsRaidTrend').innerHTML='<div class="hint">레이드 기록이 없어.</div>';
+   return;
+ }
+ let rid=sel.value,rs=db.records.filter(r=>r.raid===rid),total=rs.reduce((a,r)=>a+(+r.damage||0),0);
+ let by={};rs.forEach(r=>by[r.member]=(by[r.member]||0)+(+r.damage||0));
+ let participants=Object.keys(by).length,abs=db.members.filter(m=>!by[m.id]).length;
+ $('stTotal').textContent=total.toFixed(2)+'억';
+ $('stParticipants').textContent=participants+'명';$('stAbsent').textContent=abs+'명';
+ $('stLast').textContent=rs.filter(r=>r.last).length+'회';
+ $('stAvg').textContent=(rs.length?total/rs.length:0).toFixed(2)+'억';
+ $('stWarnings').textContent=warningCounts()[Object.keys(by)[0]]?Object.values(warningCounts()).reduce((a,x)=>a+x,0)+'회':Object.values(warningCounts()).reduce((a,x)=>a+x,0)+'회';
+
+ let sorted=Object.entries(by).sort((a,b)=>b[1]-a[1]);
+ $('statsDamage').innerHTML=sorted.length?'<div class="rank-bars">'+sorted.map((x,i)=>{
+   let pct=total?x[1]/total*100:0;
+   return `<div class="rank-row"><div class="rank-name"><span>${i+1}</span><b>${esc(mname(x[0]))}</b><em>${x[1].toFixed(2)}억 · ${pct.toFixed(1)}%</em></div><div class="bar-bg"><div class="bar-fill" style="width:${pct}%"></div></div></div>`;
+ }).join('')+'</div>':'<div class="hint">기록이 없어.</div>';
+
+ $('statsContribution').innerHTML=sorted.length?'<table><tr><th>길드원</th><th>딜량</th><th>기여도</th></tr>'+sorted.map(x=>`<tr><td>${esc(mname(x[0]))}</td><td>${x[1].toFixed(2)}억</td><td>${(x[1]/total*100).toFixed(1)}%</td></tr>`).join('')+'</table>':'<div class="hint">기록이 없어.</div>';
+
+ let bossMap={};rs.forEach(r=>{
+   let ba=r.bossAttr||''; if(!ba && r.weak){const rev={'전격':'수냉','철갑':'전격','풍압':'철갑','작열':'풍압','수냉':'작열'};ba=rev[r.weak]||'';} let key=(r.bossName||'미지정')+'|'+ba;
+   bossMap[key]??={name:r.bossName||'미지정',attr:ba,weak:weakOf(ba),sum:0,n:0,max:0};
+   bossMap[key].sum+=+r.damage||0;bossMap[key].n++;bossMap[key].max=Math.max(bossMap[key].max,+r.damage||0);
+ });
+ let barr=Object.values(bossMap).sort((a,b)=>b.sum-a.sum);
+ $('statsBoss').innerHTML=barr.length?'<table><tr><th>보스</th><th>속성·약점</th><th>누적</th><th>평균</th><th>최고</th></tr>'+barr.map(x=>`<tr><td>${esc(x.name)}</td><td>${x.attr||''}>>${x.weak||weakOf(x.attr)}</td><td>${x.sum.toFixed(2)}억</td><td>${(x.sum/x.n).toFixed(2)}억</td><td>${x.max.toFixed(2)}억</td></tr>`).join('')+'</table>':'<div class="hint">기록이 없어.</div>';
+
+ let trend=db.raids.map(r=>{
+   let a=db.records.filter(x=>x.raid===r.id),t=a.reduce((s,x)=>s+(+x.damage||0),0);
+   return {no:r.no,total:t};
+ }).filter(x=>x.total>0);
+ renderSimpleLine($('statsRaidTrend'),trend.map(x=>x.no),trend.map(x=>x.total),'총 딜(억)');
+}
+function renderStatsGrowth(){
+ let mid=$('statsMember')?.value;
+ if(!mid){$('statsGrowth').innerHTML='<div class="hint">길드원을 선택해줘.</div>';return}
+ let metric=$('statsGrowthMetric').value,rows=db.raids.map(r=>{
+   let a=db.records.filter(x=>x.raid===r.id&&x.member===mid);
+   return {no:r.no,total:a.reduce((s,x)=>s+(+x.damage||0),0),level:db.members.find(m=>m.id===mid)?.level||0,avg:a.length?a.reduce((s,x)=>s+(+x.damage||0),0)/a.length:0};
+ }).filter(x=>x.total>0||x.level>0);
+ let ys=rows.map(x=>metric==='damage'?x.total:metric==='level'?x.level:x.avg),label=metric==='damage'?'딜량(억)':metric==='level'?'레벨':'평균 딜(억)';
+ renderSimpleLine($('statsGrowth'),rows.map(x=>x.no),ys,label);
+}
+function renderSimpleLine(el,xs,ys,label){
+ if(!ys.length){el.innerHTML='<div class="hint">기록이 없어.</div>';return}
+ let w=900,h=290,p=48,min=Math.min(...ys),max=Math.max(...ys);if(min===max){min-=1;max+=1}
+ let pts=ys.map((v,i)=>[p+i*(w-2*p)/Math.max(1,ys.length-1),h-p-(v-min)/(max-min)*(h-2*p)]),d=pts.map((q,i)=>(i?'L':'M')+q[0]+','+q[1]).join('');
+ let svg=`<svg viewBox="0 0 ${w} ${h}" width="100%" height="290"><line x1="${p}" y1="${h-p}" x2="${w-p}" y2="${h-p}" stroke="#303949"/><path d="${d}" fill="none" stroke="#ff6fae" stroke-width="3"/>`;
+ pts.forEach((q,i)=>svg+=`<circle cx="${q[0]}" cy="${q[1]}" r="5" fill="#ff6fae"/><text x="${q[0]}" y="${h-14}" text-anchor="middle" fill="#9ca7ba" font-size="11">${xs[i]}</text>`);
+ svg+=`<text x="${p}" y="18" fill="#9ca7ba" font-size="12">${label}</text></svg>`;el.innerHTML=svg;
+}
+function ensureMeetups(){
+ if(!db.meetups) db.meetups=[];
+}
+let currentMeetupParticipants=[];
+
+function normalizeMeetupDate(v){
+ v=String(v||'').replace(/\D/g,'');
+ if(v.length===6)return '20'+v.slice(0,2)+'-'+v.slice(2,4)+'-'+v.slice(4,6);
+ if(/^\d{4}-\d{2}-\d{2}$/.test(v))return v;
+ return '';
+}
+function displayMeetupDate(v){
+ let m=String(v||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+ if(m)return `${m[1]}.${m[2]}.${m[3]}`;
+ let x=String(v||'').replace(/\D/g,'');
+ if(x.length===6)return `20${x.slice(0,2)}.${x.slice(2,4)}.${x.slice(4,6)}`;
+ return v||'';
+}
+function meetupSearchCode(v){
+ let x=String(v||'').replace(/\D/g,'');
+ if(x.length===8)return x.slice(2);
+ return x;
+}
+function focusDiary(){ $('diaryEditor').focus(); }
+function clearMeetupSearch(){ $('meetupSearchDate').value=''; $('meetupSearchMember').value=''; renderMeetups(); }
+
+function currentParticipants(){
+ return [...new Set(currentMeetupParticipants)];
+}
+function renderParticipantChips(){
+ $('participantChips').innerHTML=currentParticipants().map(mid=>{
+   let m=db.members.find(x=>x.id===mid);
+   return m?`<span class="participant-chip">@${esc(m.name)} <button type="button" onclick="removeParticipant('${mid}')">×</button></span>`:'';
+ }).join('');
+}
+function addParticipant(mid){
+ if(!db.members.some(m=>m.id===mid))return;
+ if(!currentMeetupParticipants.includes(mid))currentMeetupParticipants.push(mid);
+ renderParticipantChips();
+}
+function removeParticipant(mid){
+ currentMeetupParticipants=currentMeetupParticipants.filter(x=>x!==mid);
+ renderParticipantChips();
+}
+function participantAutocomplete(){
+ let q=($('participantSearch').value||'').trim();
+ let at=q.startsWith('@')?q.slice(1).toLowerCase():q.toLowerCase();
+ if(!at){$('participantSuggestions').classList.add('hidden');return;}
+ let matches=db.members.filter(m=>m.name.toLowerCase().includes(at)).slice(0,8);
+ $('participantSuggestions').innerHTML=matches.length
+   ?matches.map(m=>`<button type="button" onclick="chooseParticipant('${m.id}')">@${esc(m.name)}</button>`).join('')
+   :'<div class="muted small">찾는 길드원이 없어.</div>';
+ $('participantSuggestions').classList.remove('hidden');
+}
+function chooseParticipant(mid){
+ let m=db.members.find(x=>x.id===mid);if(!m)return;
+ addParticipant(mid);
+ $('participantSearch').value='';
+ $('participantSuggestions').classList.add('hidden');
+ insertMentionAtCaret(m.name);
+}
+function insertMentionAtCaret(name){
+ let ed=$('diaryEditor');ed.focus();
+ let sel=window.getSelection();
+ if(!sel.rangeCount)return;
+ let range=sel.getRangeAt(0);
+ let text='@'+name+' ';
+ range.deleteContents();
+ range.insertNode(document.createTextNode(text));
+ range.collapse(false);
+ sel.removeAllRanges();sel.addRange(range);
+}
+function insertDiaryImage(){
+ let input=document.createElement('input');input.type='file';input.accept='image/*';
+ input.onchange=()=>{let file=input.files?.[0];if(!file)return;
+   let reader=new FileReader();
+   reader.onload=()=>{
+     let ed=$('diaryEditor');ed.focus();let sel=window.getSelection();
+     if(!sel.rangeCount){sel=document.createRange();sel.selectNodeContents(ed);sel.collapse(false)}
+     let range=sel.getRangeAt(0);range.collapse(true);
+     let img=document.createElement('img');img.src=reader.result;img.alt=file.name;img.className='diary-inline-image';
+     range.insertNode(img);
+     let br=document.createElement('p');br.innerHTML='<br>';img.after(br);
+     let r2=document.createRange();r2.setStart(br,0);r2.collapse(true);sel.removeAllRanges();sel.addRange(r2);
+   };reader.readAsDataURL(file);
+ };input.click();
+}
+function insertDiaryDivider(){
+ let ed=$('diaryEditor');ed.focus();let sel=window.getSelection();if(!sel.rangeCount)return;
+ let range=sel.getRangeAt(0);let hr=document.createElement('hr');range.deleteContents();range.insertNode(hr);range.collapse(false);
+}
+function collectMentionsFromHTML(html){
+ let temp=document.createElement('div');temp.innerHTML=html;
+ let text=temp.textContent||'';
+ let ids=[];
+ db.members.forEach(m=>{
+   if(text.includes('@'+m.name))ids.push(m.id);
+ });
+ return [...new Set(ids)];
+}
+function saveMeetupEditor(){
+ ensureMeetups();
+ let date=normalizeMeetupDate($('meetupDate6').value);
+ if(!date)return alert('정모 날짜를 YYMMDD 6자리로 입력해줘. 예: 260809');
+ let title=$('meetupTitle').value.trim()||'강아지 정모';
+ let html=$('diaryEditor').innerHTML.trim();
+ if(!html || html==='<br>')return alert('일기 내용이나 사진을 하나는 넣어줘.');
+ let mentioned=collectMentionsFromHTML(html);
+ currentParticipants.forEach(mid=>{});
+ let participants=[...new Set([...currentParticipants,...mentioned])];
+ db.meetups.push({id:uid(),date,title,html,participants});
+ save();
+ clearMeetupEditor();
+ alert('정모 일지 저장 완료! 🐶');
+}
+function clearMeetupEditor(){
+ $('meetupDate6').value='';$('meetupTitle').value='';$('diaryEditor').innerHTML='';$('participantSearch').value='';$('participantSuggestions').classList.add('hidden');
+ currentMeetupParticipants=[];renderParticipantChips();
+}
+function deleteMeetup(id){
+ if(confirm('이 정모 일지를 삭제할까?')){db.meetups=db.meetups.filter(x=>x.id!==id);save();renderMeetups();}
+}
+function meetupMatches(x,dateQ,memberQ){
+ let dateOK=!dateQ || meetupSearchCode(x.date).includes(meetupSearchCode(dateQ));
+ let names=(x.participants||[]).map(mid=>db.members.find(m=>m.id===mid)?.name||'').join(' ').toLowerCase();
+ let mentionText=(x.html||'').replace(/<[^>]+>/g,' ').toLowerCase();
+ let memOK=!memberQ || names.includes(memberQ.toLowerCase()) || mentionText.includes('@'+memberQ.toLowerCase());
+ return dateOK&&memOK;
+}
+function legacyMeetupHTML(x){
+ if(x.html)return x.html;
+ let body=esc(x.body||'').replace(/\n/g,'<br>');
+ let photos=(x.photos||[]).map(ph=>`<p><img class="diary-inline-image" src="${ph.data}" alt="${esc(ph.name)}"></p>`).join('');
+ return body+photos;
+}
+function renderMeetups(){
+ ensureMeetups();
+ let dateQ=$('meetupSearchDate')?.value.trim()||'',memQ=$('meetupSearchMember')?.value.trim()||'';
+ let arr=[...db.meetups].filter(x=>meetupMatches(x,dateQ,memQ)).sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+ $('meetupList').innerHTML=arr.length?arr.map(x=>{
+   let participants=(x.participants||[]).map(mid=>db.members.find(m=>m.id===mid)).filter(Boolean);
+   return `<article class="meetup-entry card">
+     <div class="meetup-date">${displayMeetupDate(x.date)}</div>
+     <h2>${esc(x.title)}</h2>
+     ${participants.length?`<div class="meetup-participants"><span class="muted">참여자</span> ${participants.map(m=>`<button type="button" class="participant-chip readonly" onclick="searchMeetupMember('${esc(m.name)}')">@${esc(m.name)}</button>`).join(' ')}</div>`:''}
+     <div class="meetup-body diary-render">${legacyMeetupHTML(x)}</div>
+     <div style="text-align:right;margin-top:12px"><button onclick="deleteMeetup('${x.id}')">삭제</button></div>
+   </article>`;
+ }).join(''):'<div class="card hint">조건에 맞는 정모 일지가 없어.</div>';
+}
+function searchMeetupMember(name){
+ $('meetupSearchMember').value=name;renderMeetups();
+}
+function ensureWarningData(){
+ if(!db.warningEvents) db.warningEvents=[];
+}
+function isRaidParticipated(rid,mid){
+ return db.records.some(r=>r.raid===rid&&r.member===mid&&((+r.damage||0)>0||r.chars?.some(Boolean)||r.last||r.warn));
+}
+function syncAbsenceWarnings(){
+ ensureWarningData();
+ db.raids.filter(r=>r.closed).forEach(r=>{
+   db.members.forEach(m=>{
+     let hits=db.records.filter(x=>x.raid===r.id&&x.member===m.id&&(
+       (+x.damage||0)>0 || x.chars?.some(Boolean) || x.last || x.warn
+     )).length;
+     let expected=3;
+     let existing=db.warningEvents.filter(w=>w.type==='raid_use'&&w.raid===r.id&&w.member===m.id);
+     let wanted = hits===0 ? 1 : Math.max(0,expected-hits);
+     // One automatic event stores the net warning for this raid.
+     if(wanted>0){
+       let reason=hits===0?'레이드 미참여':'레이드 횟수 미소진';
+       if(!existing.length){
+         db.warningEvents.push({
+           id:uid(),type:'raid_use',member:m.id,raid:r.id,
+           delta:wanted,reason,date:new Date().toISOString()
+         });
+       }else{
+         existing[0].delta=wanted;
+         existing[0].reason=reason;
+         // Remove duplicates, if any.
+         db.warningEvents=db.warningEvents.filter(w=>w===existing[0]||!(w.type==='raid_use'&&w.raid===r.id&&w.member===m.id));
+       }
+     }else{
+       db.warningEvents=db.warningEvents.filter(w=>!(w.type==='raid_use'&&w.raid===r.id&&w.member===m.id));
+     }
+   });
+ });
+}
+function warningCounts(){
+ syncAbsenceWarnings();
+ let c={};
+ db.warningEvents.forEach(w=>c[w.member]=(c[w.member]||0)+(w.delta||0));
+ db.records.filter(r=>r.warn).forEach(r=>{
+   c[r.member]=(c[r.member]||0)+1;
+   // record-level warnings get a generated event only for display/count compatibility
+ });
+ return c;
+}
+function addManualWarning(mid){
+ let reason=prompt('경고 사유를 입력해줘.');if(reason===null)return;
+ reason=reason.trim();if(!reason)return alert('사유를 입력해야 해.');
+ ensureWarningData();
+ db.warningEvents.push({id:uid(),type:'manual',member:mid,delta:1,reason,date:new Date().toISOString()});
+ save();
+}
+function deductWarning(mid){
+ let reason=prompt('경고 차감 사유를 입력해줘.');if(reason===null)return;
+ reason=reason.trim();if(!reason)return alert('차감 사유를 입력해야 해.');
+ let c=warningCounts()[mid]||0;if(c<=0)return;
+ ensureWarningData();
+ db.warningEvents.push({id:uid(),type:'manual',member:mid,delta:-1,reason,date:new Date().toISOString()});
+ save();
+}
+function setWarningCount(mid,val){
+ let target=Math.max(0,parseInt(val)||0),c=warningCounts(),cur=c[mid]||0;
+ if(target===cur)return;
+ let delta=target-cur;
+ let reason=prompt(delta>0?'추가할 경고 사유를 입력해줘.':'차감할 사유를 입력해줘.');
+ if(reason===null)return;
+ reason=reason.trim();if(!reason)return alert('사유를 입력해야 해.');
+ ensureWarningData();
+ db.warningEvents.push({id:uid(),type:'manual',member:mid,delta,reason,date:new Date().toISOString()});
+ save();
+}
+function changeWarning(mid,delta){
+ let c=warningCounts(),now=Math.max(0,(c[mid]||0)+delta);
+ if(delta>0)addManualWarning(mid);else if(delta<0)deductWarning(mid);
+}
+function renderWarnings(){
+ syncAbsenceWarnings();
+
+ // Build complete event list, including warnings recorded directly on attacks.
+ let events=[...(db.warningEvents||[])];
+ db.records.filter(r=>r.warn).forEach(r=>{
+   events.push({
+     id:'record-'+r.id,type:'attack',member:r.member,raid:r.raid,
+     delta:1,reason:'공격 기록에서 경고',date:''
+   });
+ });
+
+ // Aggregate per member. Highest warning total first, then name.
+ let groups={};
+ events.forEach(w=>{
+   groups[w.member]??=[];
+   groups[w.member].push(w);
+ });
+ let totals=Object.entries(groups).map(([mid,list])=>[
+   mid,list.reduce((sum,w)=>sum+(w.delta||0),0),list
+ ]).filter(x=>x[1]>0).sort((a,b)=>{
+   if(b[1]!==a[1])return b[1]-a[1];
+   return mname(a[0]).localeCompare(mname(b[0]),'ko');
+ });
+
+ // Person-by-person grouped layout.
+ $('warningList').innerHTML=totals.length
+ ? totals.map(([mid,total,list])=>{
+    list.sort((a,b)=>{
+      let da=a.date?new Date(a.date).getTime():0;
+      let dbb=b.date?new Date(b.date).getTime():0;
+      return dbb-da;
+    });
+    return `<div class="warning-person">
+      <div class="warning-person-head">
+        <span class="warning-person-name">${esc(mname(mid))}</span>
+        <span class="warning-total">경고 총 ${total}회</span>
+      </div>
+      <div class="warning-history-list">
+        ${list.map(w=>{
+          let r=w.raid?raid(w.raid):null;
+          let date=w.date?new Date(w.date).toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'}):'-';
+          let round=r?.no?`${esc(r.no)}`:'-';
+          let cls=w.delta<0?'warning-minus':'warning-plus';
+          let type=w.type==='raid_use'?'자동':w.type==='attack'?'공격':'수동';
+          return `<div class="warning-history-row">
+            <span class="warning-date">${date}</span>
+            <span class="warning-round">${round}</span>
+            <span class="${cls}">${w.delta>0?'+':''}${w.delta}회</span>
+            <span class="warning-type">${type}</span>
+            <span class="warning-reason">${esc(w.reason||'')}</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+ }).join('')
+ : '<div class="hint">현재 누적 경고가 있는 사람이 없어.</div>';
+
+ // Keep a compact all-history table out of the way; grouped view above is the primary view.
+ let history=events.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+ $('warningHistory').innerHTML=history.length
+ ? `<table><tr><th>날짜</th><th>길드원</th><th>회차</th><th>구분</th><th>횟수</th><th>사유</th></tr>
+ ${history.map(w=>{
+   let r=w.raid?raid(w.raid):null;
+   return `<tr>
+    <td>${w.date?new Date(w.date).toLocaleString('ko-KR'):'-'}</td>
+    <td>${esc(mname(w.member))}</td>
+    <td>${r?.no?esc(r.no):'-'}</td>
+    <td>${w.type==='raid_use'?'자동':w.type==='attack'?'공격기록':'수동'}</td>
+    <td class="${w.delta<0?'ok':'abs'}">${w.delta>0?'+':''}${w.delta}</td>
+    <td>${esc(w.reason||'')}</td>
+   </tr>`;
+ }).join('')}</table>`
+ : '<div class="hint">경고 이력이 없어.</div>';
+}
+function renderDash(){
+ let rid=$('dashRaid').value||db.raids.at(-1)?.id;if(!rid){$('dashInfo').innerHTML='<p class="muted">레이드가 없어.</p>';return}
+ $('dashRaid').value=rid;let rs=db.records.filter(x=>x.raid===rid),tot=rs.reduce((s,x)=>s+x.damage,0),by={};rs.forEach(x=>by[x.member]=(by[x.member]||0)+x.damage);
+ let part=Object.keys(by).length,abs=db.members.filter(m=>!by[m.id]).length;$('dPart').textContent=part;$('dAbs').textContent=abs;
+ $('dashInfo').innerHTML=`<div class="grid"><div class="stat"><span class="muted">총 딜</span><b>${tot.toFixed(2)}억</b></div><div class="stat"><span class="muted">참여</span><b>${part}/${db.members.length}</b></div><div class="stat"><span class="muted">미참여</span><b class="abs">${abs}명</b></div><div class="stat"><span class="muted">막타</span><b>${rs.filter(x=>x.last).length}회</b></div></div>`;
+ let sorted=Object.entries(by).sort((a,b)=>b[1]-a[1]);$('rank').innerHTML='<table><tr><th>순위</th><th>길드원</th><th>딜량</th><th>기여도</th></tr>'+sorted.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(mname(x[0]))}</td><td>${x[1].toFixed(2)}억</td><td>${tot?(x[1]/tot*100).toFixed(1):0}%</td></tr>`).join('')+'</table>';drawPie(sorted,tot)
+}
+function renderBossCompare(){
+ let map={};
+ db.records.forEach(r=>{
+   let ba=r.bossAttr||''; if(!ba && r.weak){const rev={'전격':'수냉','철갑':'전격','풍압':'철갑','작열':'풍압','수냉':'작열'};ba=rev[r.weak]||'';} let key=(r.bossName||'미지정')+'|'+ba;
+   if(!map[key])map[key]={name:r.bossName||'미지정',attr:ba,weak:weakOf(ba),sum:0,n:0,max:0};
+   map[key].sum+=+r.damage||0;map[key].n++;map[key].max=Math.max(map[key].max,+r.damage||0);
+ });
+ let arr=Object.values(map).sort((a,b)=>b.sum-a.sum);
+ $('bossCompare').innerHTML=arr.length?'<table><tr><th>보스</th><th>약점</th><th>누적 딜</th><th>공격 수</th><th>평균 딜</th><th>최고 딜</th></tr>'+
+ arr.map(x=>`<tr><td>${esc(x.name)}</td><td><span class="pill">${x.weak}</span></td><td>${x.sum.toFixed(2)}억</td><td>${x.n}</td><td>${(x.sum/x.n).toFixed(2)}억</td><td>${x.max.toFixed(2)}억</td></tr>`).join('')+'</table>':'<div class="hint">기록이 없어.</div>';
+}
+function drawPie(sorted,tot){
+ if(!sorted.length){$('pie').innerHTML='<p class="muted">기록이 없어.</p>';return}
+ let rows=sorted.slice(0,10),colors=['#ff6fae','#7aa7ff','#68d6a6','#ffc56b','#b58cff','#6ed6e8','#ff8c69','#a9b3c7','#d68cff','#7ee0c1'],cx=130,cy=130,r=95,ang=-Math.PI/2,svg=`<svg viewBox="0 0 720 280" width="100%" height="280">`;
+ rows.forEach((x,i)=>{let a=x[1]/tot*Math.PI*2,x1=cx+r*Math.cos(ang),y1=cy+r*Math.sin(ang),x2=cx+r*Math.cos(ang+a),y2=cy+r*Math.sin(ang+a),lg=a>Math.PI?1:0;svg+=`<path d="M${cx},${cy}L${x1},${y1}A${r},${r} 0 ${lg} 1 ${x2},${y2}Z" fill="${colors[i]}"/>`;ang+=a});
+ svg+='<circle cx="130" cy="130" r="43" fill="#0e131b"/>';rows.forEach((x,i)=>svg+=`<rect x="270" y="${25+i*25}" width="11" height="11" rx="3" fill="${colors[i]}"/><text x="289" y="${35+i*25}" fill="#f5f7fb" font-size="13">${esc(mname(x[0]))} · ${(x[1]/tot*100).toFixed(1)}%</text>`);svg+='</svg>';$('pie').innerHTML=svg
+}
+function renderHistory(){
+ let id=$('hm').value;if(!id){$('line').innerHTML='<p class="muted">길드원을 선택해줘.</p>';$('person').innerHTML='';$('ht').innerHTML='';return}
+ let rows=db.raids.map(r=>{let a=db.records.filter(x=>x.raid===r.id&&x.member===id);return {r,a,total:a.reduce((s,x)=>s+x.damage,0),level:db.members.find(m=>m.id===id)?.level||0}}).filter(x=>x.a.length);
+ let metric=$('metric').value,vals=rows.map(x=>metric==='damage'?x.total:metric==='level'?x.level:x.total/x.a.length),label=metric==='damage'?'딜량(억)':metric==='level'?'레벨':'평균 딜(억)';drawLine(rows.map(x=>x.r.no),vals,label);
+ let all=db.records.filter(x=>x.member===id),sum=all.reduce((s,x)=>s+x.damage,0),max=Math.max(0,...all.map(x=>x.damage)),miss=db.raids.filter(r=>!db.records.some(x=>x.raid===r.id&&x.member===id)).length;
+ $('person').innerHTML=`<div class="grid"><div class="stat"><span class="muted">누적 딜</span><b>${sum.toFixed(2)}억</b></div><div class="stat"><span class="muted">최고 1타</span><b>${max.toFixed(2)}억</b></div><div class="stat"><span class="muted">총 공격</span><b>${all.length}회</b></div><div class="stat"><span class="muted">미참여</span><b class="${miss?'abs':'ok'}">${miss}회</b></div></div>`;
+ $('ht').innerHTML='<table><tr><th>회차</th><th>총 딜</th><th>평균 레벨</th><th>공격</th><th>막타</th></tr>'+rows.map(x=>`<tr><td>${esc(x.r.no)}</td><td>${x.total.toFixed(2)}억</td><td>${x.level.toFixed(1)}</td><td>${x.a.length}회</td><td>${x.a.filter(y=>y.last).length?'🔥':''}</td></tr>`).join('')+'</table>'
+}
+function drawLine(xs,ys,label){if(!ys.length){$('line').innerHTML='<p class="muted">기록이 없어.</p>';return}let w=950,h=300,p=45,min=Math.min(...ys),max=Math.max(...ys);if(min===max){min-=1;max+=1}let pts=ys.map((v,i)=>[p+i*(w-2*p)/Math.max(1,ys.length-1),h-p-(v-min)/(max-min)*(h-2*p)]),d=pts.map((q,i)=>(i?'L':'M')+q[0]+','+q[1]).join(''),svg=`<svg viewBox="0 0 ${w} ${h}" width="100%" height="300"><line x1="${p}" y1="${h-p}" x2="${w-p}" y2="${h-p}" stroke="#303949"/><path d="${d}" fill="none" stroke="#ff6fae" stroke-width="3"/>`;pts.forEach((q,i)=>svg+=`<circle cx="${q[0]}" cy="${q[1]}" r="5" fill="#ff6fae"/><text x="${q[0]}" y="${h-15}" text-anchor="middle" fill="#9ca7ba" font-size="11">${xs[i]}</text>`);svg+=`<text x="${p}" y="20" fill="#9ca7ba" font-size="12">${esc(label)}</text></svg>`;$('line').innerHTML=svg}
+function backup(){let b=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='길드레이드_백업.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+$('restore').addEventListener('change',e=>{let f=e.target.files[0];if(!f)return;let rd=new FileReader();rd.onload=()=>{try{db=JSON.parse(rd.result);save();alert('복원 완료!')}catch{alert('잘못된 백업 파일이야.')}};rd.readAsText(f)});
+refresh();
+$('nikkeFile')?.addEventListener('change',e=>{let f=e.target.files?.[0];if(!f)return;let r=new FileReader();r.onload=()=>{$('nikkePaste').value=r.result;importNikkeSync()};r.readAsText(f,'UTF-8')});
+</script>
+<script>
+window.__NIKKE_AUTO_SYNC = function(payload){
+  try{
+    if(!payload) throw new Error('payload 없음');
+    if(typeof importNikkeSync !== 'function') throw new Error('importNikkeSync 준비 전');
+    const box=document.getElementById('nikkePaste');
+    if(box) box.value=JSON.stringify(payload);
+    importNikkeSync();
+  }catch(e){
+    console.error('[NIKKE AUTO SYNC]',e);
+    alert('NIKKE 데이터 자동 반영에 실패했어: '+e.message);
+  }
+};
+window.addEventListener('message',function(e){
+  if(e.data && e.data.type==='nikke-full-sync') window.__NIKKE_AUTO_SYNC(e.data);
+});
+</script>
+
+<script>
+function downloadBackup(){
+  const data=JSON.stringify(db,null,2);
+  const blob=new Blob([data],{type:'application/json;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`강아지지휘관일지_백업_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+function downloadDataText(){
+  const data=JSON.stringify(db,null,2);
+  const blob=new Blob([data],{type:'application/json;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`강아지지휘관일지_공유데이터_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  alert('공유용 데이터 파일을 만들었어. 이 파일을 길드원에게 보내면 같은 데이터로 확인할 수 있어.');
+}
+document.getElementById('backupFile')?.addEventListener('change',e=>{
+  const f=e.target.files?.[0]; if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const incoming=JSON.parse(r.result);
+      if(!incoming || typeof incoming!=='object')throw new Error('잘못된 데이터');
+      db=incoming;
+      localStorage.setItem(KEY,JSON.stringify(db));
+      refresh();
+      alert('데이터 복원 완료!');
+    }catch(err){alert('백업 파일을 읽지 못했어.')}
+  };
+  r.readAsText(f,'UTF-8');
+});
+</script>
+<script>window.addEventListener('load',()=>{applyAccessMode();loadSharedData();});</script><script>window.addEventListener('load',()=>{applyAccessMode();loadSharedData();});</script></body></html>
