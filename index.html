@@ -320,6 +320,8 @@ async function adminLogin(){
   if(!(await verifyAdminPassword(p)))return alert('비밀번호가 틀렸어.');
   adminPassword=p;sessionStorage.setItem('guild_admin_password',p);
   applyAccessMode();setSharedStatus('👑 관리자 모드');
+  const pendingNikke=sessionStorage.getItem('nikke_pending_sync');
+  if(pendingNikke){try{const data=JSON.parse(pendingNikke);const box=document.getElementById('nikkePaste');if(box)box.value=JSON.stringify(data);sessionStorage.removeItem('nikke_pending_sync');if(typeof importNikkeSync==='function')importNikkeSync();}catch(e){console.warn('[NIKKE pending sync]',e);}}
   const pending=sessionStorage.getItem('nikke_pending_sync');
   if(pending){
     try{
@@ -344,14 +346,23 @@ function adminLogout(){adminPassword='';sessionStorage.removeItem('guild_admin_p
 function setSharedStatus(t){const el=document.getElementById('sharedStatus');if(el)el.textContent=t;}
 
 async function loadSharedData(){
-  try{
-    const r=await fetch(`${SUPABASE_URL}/rest/v1/guild_raid_state?id=eq.${SUPABASE_ROW}&select=data,updated_at`,{headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}});
-    if(!r.ok)throw new Error('공용 DB 읽기 실패 '+r.status);
-    const rows=await r.json();
-    if(rows[0]?.data){db=rows[0].data;localStorage.setItem(KEY,JSON.stringify(db));}
-    window.__sharedStamp=rows[0]?.updated_at||'';
-    refresh();subscribeSharedData();applyAccessMode();setSharedStatus(isAdmin()?'👑 관리자 모드':'👀 조회 모드');
-  }catch(e){console.warn(e);refresh();applyAccessMode();setSharedStatus('⚠ 공용 DB 연결 실패');}
+ try{
+  const local=JSON.parse(localStorage.getItem(KEY)||'null');
+  const r=await fetch(`${SUPABASE_URL}/rest/v1/guild_raid_state?id=eq.${SUPABASE_ROW}&select=data,updated_at`,{headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}});
+  if(!r.ok)throw new Error('공용 DB 읽기 실패 '+r.status);
+  const rows=await r.json(),server=rows[0]?.data;
+  const serverHasData=!!(server&&(server.members?.length||server.raids?.length||server.records?.length||server.bosses?.length));
+  const localHasData=!!(local&&(local.members?.length||local.raids?.length||local.records?.length||local.bosses?.length));
+  if(serverHasData){
+    db=server;
+  }else if(localHasData&&isAdmin()){
+    db=local;localStorage.setItem(KEY,JSON.stringify(db));await pushSharedData();
+  }else{
+    db=server||db;
+  }
+  window.__sharedStamp=rows[0]?.updated_at||'';
+  refresh();subscribeSharedData();applyAccessMode();setSharedStatus(isAdmin()?'👑 관리자 모드':'👀 조회 모드');
+ }catch(e){console.warn('[공용 DB]',e);refresh();applyAccessMode();setSharedStatus('⚠ 공용 DB 연결 실패');}
 }
 async function pushSharedData(){
   if(!isAdmin()||sharedSaving)return false;
@@ -548,58 +559,30 @@ function pasteNikkeSync(){
 function importNikkeSync(){
  const text=$('nikkePaste').value.trim();if(!text)return alert('NIKKE 동기화 데이터가 없어.');
  let payload;try{payload=JSON.parse(text)}catch(e){return alert('JSON 형식이 아니야.')}
- const memberRows=getMemberRows(payload);
- memberRows.forEach(ensureMemberFromApi);
+ const memberRows=getMemberRows(payload);memberRows.forEach(ensureMemberFromApi);
  const raidsRaw=getRaidRows(payload).filter(x=>(+x.difficulty||2)===2);
  const roundLabel=deriveRound(payload);
  const targetRaid=ensureRaidForImport(roundLabel?`유레 ${roundLabel}차`:'NIKKE 유레');
  if(!targetRaid)return alert('레이드 회차를 만들지 못했어.');
  const nameMap=buildCharacterMap(payload);
  const decoded=raidsRaw.map(x=>decodeRaidRecord(x,nameMap)).filter(x=>x.nickname);
-
- // NIKKE member endpoint is sometimes not present in the captured page response.
- // In that case, populate the guild member list from raid nicknames so records still work.
- decoded.forEach(r=>{
-   if(!db.members.some(m=>m.name===r.nickname)){
-     ensureMemberFromApi({nickname:r.nickname,openid:r.openid,member_id:r.openid, synchro_level:r.level});
-   }
- });
-
+ decoded.forEach(r=>{if(!db.members.some(m=>m.name===r.nickname))ensureMemberFromApi({nickname:r.nickname,openid:r.openid,member_id:r.openid,synchro_level:r.level})});
  let addedRecords=0,matched=0;
  const existingKeys=new Set(db.records.filter(r=>r.raid===targetRaid.id).map(r=>[r.member,r.hit,r.bossName,r.damage,r.step].join('|')));
- const grouped={};
- decoded.forEach(r=>(grouped[r.nickname]??=[]).push(r));
- Object.values(grouped).forEach(list=>list.sort((a,b)=>((a.hitNo||99)-(b.hitNo||99))));
-
+ const grouped={};decoded.forEach(r=>(grouped[r.nickname]??=[]).push(r));
+ Object.values(grouped).forEach(list=>list.sort((a,b)=>(a.hitNo||99)-(b.hitNo||99)));
  for(const [nick,list] of Object.entries(grouped)){
-   const mem=db.members.find(m=>m.name===nick);
-   if(!mem)continue;
-   matched++;
-   const level=Math.max(0,...list.map(x=>x.level||0),...(memberRows.filter(m=>m.nickname===nick).map(m=>+m.synchro_level||0)));
-   if(level)mem.level=level;
+   const mem=db.members.find(m=>m.name===nick);if(!mem)continue;matched++;
+   const apiLevel=Math.max(0,...memberRows.filter(m=>m.nickname===nick).map(m=>+m.synchro_level||+m.level||0));
+   const level=Math.max(0,apiLevel,...list.map(r=>r.level||0));if(level)mem.level=level;
    list.slice(0,3).forEach((r,i)=>{
-     const hit=i+1;
-     const key=[mem.id,hit,r.bossName,r.damage,r.step].join('|');
-     if(existingKeys.has(key))return;
-     db.records.push({
-       id:uid(),raid:targetRaid.id,member:mem.id,hit,
-       bossName:r.bossName,bossAttr:r.bossAttr,weak:r.bossWeak,damage:r.damage,
-       level:level,chars:r.chars,last:r.last,warn:false,bossLevel:r.bossLevel,
-       step:r.step,difficulty:r.difficulty,openid:r.openid,slots:r.slots,source:'nikke-api'
-     });
+     const hit=i+1,key=[mem.id,hit,r.bossName,r.damage,r.step].join('|');if(existingKeys.has(key))return;
+     db.records.push({id:uid(),raid:targetRaid.id,member:mem.id,hit,bossName:r.bossName,bossAttr:r.bossAttr,weak:r.bossWeak,damage:r.damage,level,warn:false,chars:r.chars,last:r.last,bossLevel:r.bossLevel,step:r.step,difficulty:r.difficulty,openid:r.openid,slots:r.slots,source:'nikke-api'});
      existingKeys.add(key);addedRecords++;
    });
  }
-
- allBosses();
- decoded.forEach(r=>{
-   if(r.bossName&&r.bossAttr&&!db.bosses.some(b=>b.name===r.bossName&&b.attr===r.bossAttr))
-     db.bosses.push({name:r.bossName,attr:r.bossAttr,weak:r.bossWeak});
- });
-
- if(typeof save==='function')save();
- $('nikkeImportResult').innerHTML=`✅ 동기화 완료<br>길드원 ${db.members.length}명 · 매칭 ${matched}명 · 공격 ${addedRecords}건 · ${esc(targetRaid.no)}`;
- try{tab('input')}catch(e){}
+ allBosses();decoded.forEach(r=>{if(r.bossName&&r.bossAttr&&!db.bosses.some(b=>b.name===r.bossName&&b.attr===r.bossAttr))db.bosses.push({name:r.bossName,attr:r.bossAttr,weak:r.bossWeak})});
+ save();$('nikkeImportResult').innerHTML=`✅ 동기화 완료 · 길드원 ${db.members.length}명 · 매칭 ${matched}명 · 공격 ${addedRecords}건 · ${esc(targetRaid.no)}`;
 }
 function renderGrid(){
  let rid=$('inputRaid').value;
@@ -1116,7 +1099,7 @@ function renderDash(){
  let rid=$('dashRaid').value||db.raids.at(-1)?.id;if(!rid){$('dashInfo').innerHTML='<p class="muted">레이드가 없어.</p>';return}
  $('dashRaid').value=rid;let rs=db.records.filter(x=>x.raid===rid),tot=rs.reduce((s,x)=>s+x.damage,0),by={};rs.forEach(x=>by[x.member]=(by[x.member]||0)+x.damage);
  let part=Object.keys(by).length,abs=db.members.filter(m=>!by[m.id]).length;$('dPart').textContent=part;$('dAbs').textContent=abs;
- $('dashInfo').innerHTML=`<div class="grid"><div class="stat"><span class="muted">총 딜</span><b>${tot.toFixed(2)}억</b></div><div class="stat"><span class="muted">참여</span><b>${part}/${db.members.length}</b></div><div class="stat"><span class="muted">미참여</span><b class="abs">${abs}명</b></div><div class="stat"><span class="muted">막타</span><b>${rs.filter(x=>x.last).length}회</b></div></div>`;
+ $('dashInfo').innerHTML=`<div class="grid"><div class="stat"><span class="muted">총 딜</span><b>${fmtDamage(tot)}</b></div><div class="stat"><span class="muted">참여</span><b>${part}/${db.members.length}</b></div><div class="stat"><span class="muted">미참여</span><b class="abs">${abs}명</b></div><div class="stat"><span class="muted">막타</span><b>${rs.filter(x=>x.last).length}회</b></div></div>`;
  let sorted=Object.entries(by).sort((a,b)=>b[1]-a[1]);$('rank').innerHTML='<table><tr><th>순위</th><th>길드원</th><th>딜량</th><th>기여도</th></tr>'+sorted.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(mname(x[0]))}</td><td>${fmtDamage(x[1])}</td><td>${tot?(x[1]/tot*100).toFixed(1):0}%</td></tr>`).join('')+'</table>';drawPie(sorted,tot)
 }
 function renderBossCompare(){
@@ -1131,17 +1114,13 @@ function renderBossCompare(){
  arr.map(x=>`<tr><td>${esc(x.name)}</td><td><span class="pill">${x.weak}</span></td><td>${fmtDamage(x.sum)}</td><td>${x.n}</td><td>${fmtDamage(x.sum/x.n)}</td><td>${fmtDamage(x.max)}</td></tr>`).join('')+'</table>':'<div class="hint">기록이 없어.</div>';
 }
 function drawPie(sorted,tot){
- if(!db.members.length||!tot){
-   $('pie').innerHTML='<p class="muted">기록이 없어.</p>';
-   return;
- }
+ if(!db.members.length||!tot){$('pie').innerHTML='<p class="muted">기록이 없어.</p>';return}
  const rid=$('dashRaid')?.value||db.raids.at(-1)?.id||'';
- const byMember={};
- const lastByMember={};
- db.members.forEach(m=>{byMember[m.id]=0;lastByMember[m.id]=0;});
+ const byMember={},lastByMember={};
+ db.members.forEach(m=>{byMember[m.id]=0;lastByMember[m.id]=0});
  (db.records||[]).filter(r=>!rid||r.raid===rid).forEach(r=>{
    byMember[r.member]=(byMember[r.member]||0)+(+r.damage||0);
-   if(r.last) lastByMember[r.member]=(lastByMember[r.member]||0)+1;
+   if(r.last)lastByMember[r.member]=(lastByMember[r.member]||0)+1;
  });
  const all=db.members.map(m=>[m.id,byMember[m.id]||0]).sort((a,b)=>b[1]-a[1]);
  const positive=all.filter(x=>x[1]>0);
@@ -1150,7 +1129,7 @@ function drawPie(sorted,tot){
  const height=Math.max(280,Math.ceil(all.length/2)*26+40);
  let svg=`<svg viewBox="0 0 780 ${height}" width="100%" height="${height}">`;
  positive.forEach((x,i)=>{
-   const frac=x[1]/tot,a=frac*Math.PI*2;
+   const a=x[1]/tot*Math.PI*2;
    const x1=cx+r*Math.cos(ang),y1=cy+r*Math.sin(ang);
    const x2=cx+r*Math.cos(ang+a),y2=cy+r*Math.sin(ang+a);
    const lg=a>Math.PI?1:0;
@@ -1158,21 +1137,14 @@ function drawPie(sorted,tot){
    ang+=a;
  });
  svg+=`<circle cx="${cx}" cy="${cy}" r="43" fill="#0e131b"/>`;
-
- const positiveColorIndex=new Map(positive.map((p,i)=>[p[0],i]));
+ const posIndex=new Map(positive.map((p,i)=>[p[0],i]));
  all.forEach((x,i)=>{
-   const col=i%2,row=Math.floor(i/2);
-   const lx=270+col*250,ly=25+row*26;
-   const mc=lastByMember[x[0]]||0;
-   const colorIndex=positiveColorIndex.get(x[0]);
-   const swatchColor=colorIndex!=null?colors[colorIndex]:'#566070';
-   svg+=`<rect x="${lx}" y="${ly-9}" width="11" height="11" rx="3" fill="${swatchColor}"/>`;
-   svg+=`<text x="${lx+18}" y="${ly}" fill="#f5f7fb" font-size="12">${esc(mname(x[0]))} · ${(x[1]/tot*100).toFixed(2)}%`;
-   if(mc>0)svg+=` <tspan fill="#ff8f5a">💥${mc}</tspan>`;
-   svg+=`</text>`;
+   const col=i%2,row=Math.floor(i/2),lx=270+col*250,ly=25+row*26;
+   const pi=posIndex.get(x[0]),color=pi!=null?colors[pi]:'#566070',mc=lastByMember[x[0]]||0;
+   svg+=`<rect x="${lx}" y="${ly-9}" width="11" height="11" rx="3" fill="${color}"/>`;
+   svg+=`<text x="${lx+18}" y="${ly}" fill="#f5f7fb" font-size="12">${esc(mname(x[0]))} · ${(x[1]/tot*100).toFixed(2)}%${mc?` <tspan fill="#ff8f5a">💥${mc}</tspan>`:''}</text>`;
  });
- svg+='</svg>';
- $('pie').innerHTML=svg;
+ svg+='</svg>'; $('pie').innerHTML=svg;
 }
 function renderHistory(){
  let id=$('hm').value;if(!id){$('line').innerHTML='<p class="muted">길드원을 선택해줘.</p>';$('person').innerHTML='';$('ht').innerHTML='';return}
