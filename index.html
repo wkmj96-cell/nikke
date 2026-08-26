@@ -108,7 +108,7 @@ h1{letter-spacing:-.7px}
 .comment-write input{flex:1}
 </style><style>
 .damage-value{font-variant-numeric:tabular-nums}
-</style><style>.raw-damage{opacity:.72;font-size:.85em;font-weight:500;white-space:nowrap}</style></head>
+</style><style>.raw-damage{opacity:.72;font-size:.85em;font-weight:500;white-space:nowrap}</style><style>.adminOnlyTab.hidden{display:none!important}</style></head>
 <body><div class="wrap">
 <div class="top"><div><h1>🐕승리의 여신_NIKKE 강아지 지휘관 일지</h1><div class="sub"></div></div>
 <div class="row"><button onclick="backup()">백업</button><button onclick="document.getElementById('restore').click()">복원</button><input id="restore" type="file" accept=".json" class="hiddenInput"></div></div>
@@ -123,7 +123,7 @@ h1{letter-spacing:-.7px}
 <button id="adminLogoutBtn" class="hidden" onclick="adminLogout()">로그아웃</button>
 <span id="sharedStatus">👀 조회 모드</span>
 </div>
-<div class="tabs"><button onclick="tab('dash')">🏠 홈</button><button class="adminOnlyTab" onclick="tab('input')">🐶 공격입력</button><button class="adminOnlyTab" onclick="tab('members')">🐶 길드원</button><button class="adminOnlyTab" onclick="tab('bosses')">🐶 보스</button><button onclick="tab('history')">🐶 개인전적</button><button onclick="tab('stats')">📊 통계</button><button onclick="tab('meetups')">🐶 정모</button><button class="adminOnlyTab" onclick="tab('warnings')">🚨 경고내역</button></div>
+<div class="tabs"><button onclick="tab('dash')">🏠 홈</button><button class="adminOnlyTab" onclick="tab('input')">🐶 공격입력</button><button class="adminOnlyTab" onclick="tab('members')">🐶 길드원</button><button class="adminOnlyTab" onclick="tab('bosses')">🐶 보스</button><button onclick="tab('history')">🐶 개인전적</button><button onclick="tab('stats')">📊 통계</button><button class="adminOnlyTab" onclick="tab('meetups')">🐶 정모</button><button class="adminOnlyTab" onclick="tab('warnings')">🚨 경고내역</button></div>
 
 <section id="dash">
 <div class="grid"><div class="stat"><span class="muted">레이드</span><b id="dRaids">0</b></div><div class="stat"><span class="muted">길드원</span><b id="dMembers">0</b></div><div class="stat"><span class="muted">참여</span><b id="dPart">0</b></div><div class="stat"><span class="muted">미참여</span><b id="dAbs">0</b></div></div>
@@ -741,13 +741,34 @@ function applyMeetupViewerMode(){
   if(editor) editor.classList.toggle('viewer-hidden',!isAdmin());
 }
 function applyAccessMode(){
- applyMeetupViewerMode();
- document.querySelectorAll('.adminOnlyTab').forEach(b=>b.classList.toggle('hidden',!isAdmin()));
- const lo=document.getElementById('adminLogoutBtn');if(lo)lo.classList.toggle('hidden',!isAdmin());
- if(!isAdmin()){
-   ['input','members','bosses','warnings'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.add('hidden');});
-   ['dash','history','stats','meetups'].forEach(id=>{const el=document.getElementById(id);if(el&&!document.querySelector(`.tab-btn-active[data-tab="${id}"]`)){}});
- }
+  try{
+    document.querySelectorAll('.adminOnlyTab').forEach(b=>b.classList.toggle('hidden',!isAdmin()));
+    const lo=document.getElementById('adminLogoutBtn');
+    if(lo)lo.classList.toggle('hidden',!isAdmin());
+
+    const backup=document.getElementById('backupTools');
+    if(backup)backup.classList.toggle('hidden',!isAdmin());
+
+    // 관리자 전용 섹션
+    ['input','members','bosses','warnings','meetups'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el && !isAdmin()) el.classList.add('hidden');
+    });
+
+    // 조회 가능한 탭은 그대로 두고, 관리자 전용 섹션이 현재 보이면 홈으로 돌림
+    const visibleRestricted=['input','members','bosses','warnings','meetups'];
+    if(!isAdmin()){
+      for(const id of visibleRestricted){
+        const el=document.getElementById(id);
+        if(el && !el.classList.contains('hidden')){
+          el.classList.add('hidden');
+          const dash=document.getElementById('dash');
+          if(dash)dash.classList.remove('hidden');
+          break;
+        }
+      }
+    }
+  }catch(e){console.warn('[access mode]',e)}
 }
 function renderStats(){
  let opts=db.raids.map(r=>`<option value="${r.id}">${esc(r.no)}${r.memo?' · '+esc(r.memo):''}</option>`).join('');
