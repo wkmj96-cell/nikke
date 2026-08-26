@@ -412,11 +412,30 @@ function raid(id){return db.raids.find(x=>x.id===id)}
 function isRaidClosed(id){return !!db.raids.find(x=>x.id===id)?.closed}
 function mname(id){return db.members.find(x=>x.id===id)?.name||'(삭제된 길드원)'}
 function refresh(){
- $('dRaids').textContent=db.raids.length;$('dMembers').textContent=db.members.length;
- let opts=db.raids.map(r=>`<option value="${r.id}">${esc(r.no)}${r.memo?' · '+esc(r.memo):''}</option>`).join('');
- ['dashRaid','inputRaid'].forEach(id=>{let e=$(id),old=e.value;e.innerHTML=opts;if(db.raids.some(r=>r.id===old))e.value=old});
- $('hm').innerHTML='<option value="">선택</option>'+db.members.map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join('');
- populatePublicMemberPickers();renderDash();renderGrid();renderMembers();renderBosses();renderWarnings();renderHistory();renderBossCompare();renderStats();renderMeetups();filterMembersInAttack();
+ try{$('dRaids').textContent=db.raids.length}catch(e){}
+ try{$('dMembers').textContent=db.members.length}catch(e){}
+ try{
+  const opts=db.raids.map(r=>`<option value="${r.id}">${esc(r.no)}${r.memo?' · '+esc(r.memo):''}</option>`).join('');
+  ['dashRaid','inputRaid'].forEach(id=>{let e=$(id);if(!e)return;let old=e.value;e.innerHTML=opts;if(db.raids.some(r=>r.id===old))e.value=old});
+ }catch(e){}
+ try{
+  const hm=$('hm');if(hm)hm.innerHTML='<option value="">선택</option>'+db.members.map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join('');
+ }catch(e){}
+ // Render the member list before charts, so API member sync is always visible.
+ try{renderMembers()}catch(e){console.warn('renderMembers',e)}
+ const jobs=[
+  ['populatePublicMemberPickers',typeof populatePublicMemberPickers==='function'?populatePublicMemberPickers:null],
+  ['renderDash',typeof renderDash==='function'?renderDash:null],
+  ['renderGrid',typeof renderGrid==='function'?renderGrid:null],
+  ['renderBosses',typeof renderBosses==='function'?renderBosses:null],
+  ['renderWarnings',typeof renderWarnings==='function'?renderWarnings:null],
+  ['renderHistory',typeof renderHistory==='function'?renderHistory:null],
+  ['renderBossCompare',typeof renderBossCompare==='function'?renderBossCompare:null],
+  ['renderStats',typeof renderStats==='function'?renderStats:null],
+  ['renderMeetups',typeof renderMeetups==='function'?renderMeetups:null],
+  ['filterMembersInAttack',typeof filterMembersInAttack==='function'?filterMembersInAttack:null]
+ ];
+ for(const [name,fn] of jobs){try{if(fn)fn()}catch(e){console.warn(name,e)}}
 }
 function makeRaid(){
  let no=$('raidNo').value.trim();
@@ -517,13 +536,13 @@ function getCharacterMaster(payload){
 }
 function buildCharacterMap(payload){
  const map={};
- for(const x of getCharacterMaster(payload)){
-   if(!x)continue;
+ getCharacterMaster(payload).forEach(x=>{
+   if(!x)return;
    const id=x.id!=null?x.id:(x.tid!=null?x.tid:null);
    const key=id!=null?String(Math.floor(Number(id)/100)):null;
-   const name=x.name||x.character_name||x.name_ko||x.name_localvalues?.ko||x.name_localkey?.name;
+   const name=x.name||x.character_name||x.name_ko||x.name_localvalues?.ko||x.name_localkey?.name||null;
    if(key&&name)map[key]=String(name);
- }
+ });
  return map;
 }
 function decodeRaidRecord(o, nameMap={}){
@@ -1189,7 +1208,7 @@ window.__NIKKE_AUTO_SYNC = function(payload){
     importNikkeSync();
   }catch(e){
     console.error('[NIKKE AUTO SYNC]',e);
-    alert('NIKKE 데이터 자동 반영에 실패했어: '+e.message);
+    console.error('[NIKKE 데이터 자동 반영 실패]',e);
   }
 };
 window.addEventListener('message',function(e){
