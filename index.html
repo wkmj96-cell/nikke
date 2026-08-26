@@ -507,6 +507,25 @@ function deriveRound(payload){
  if(sid>=1000001 && sid<1001000)return String(sid-1000000);
  return '';
 }
+
+function getCharacterMaster(payload){
+ const raw=payload?.characterMaster||payload?.nikkeMaster;
+ if(Array.isArray(raw))return raw;
+ if(Array.isArray(raw?.data))return raw.data;
+ if(Array.isArray(raw?.items))return raw.items;
+ return [];
+}
+function buildCharacterMap(payload){
+ const map={};
+ for(const x of getCharacterMaster(payload)){
+   if(!x)continue;
+   const id=x.id!=null?x.id:(x.tid!=null?x.tid:null);
+   const key=id!=null?String(Math.floor(Number(id)/100)):null;
+   const name=x.name||x.character_name||x.name_ko||x.name_localvalues?.ko||x.name_localkey?.name;
+   if(key&&name)map[key]=String(name);
+ }
+ return map;
+}
 function decodeRaidRecord(o, nameMap={}){
  const bossRaw=nikkePick(o,['boss_name','name_localvalues.ko','boss','name'])||'';
  const cleanBoss=String(bossRaw).replace(/\[.*?\]/g,'').trim();
