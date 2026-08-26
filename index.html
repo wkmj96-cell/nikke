@@ -106,13 +106,16 @@ h1{letter-spacing:-.7px}
 .comment b{color:#f4c2ff}.comment span{flex:1}.comment time{font-size:10px;color:var(--muted)}
 .comment-write{display:flex;gap:6px;margin-top:8px}
 .comment-write input{flex:1}
-</style></head>
+</style><style>
+.damage-value{font-variant-numeric:tabular-nums}
+</style><style>.raw-damage{opacity:.72;font-size:.85em;font-weight:500;white-space:nowrap}</style></head>
 <body><div class="wrap">
 <div class="top"><div><h1>🐕승리의 여신_NIKKE 강아지 지휘관 일지</h1><div class="sub"></div></div>
-</div>
-<div id="backupTools" class="admin-backup-tools">
-  <button onclick="downloadBackup()">💾 데이터 백업</button><button id="viewBackupJson" onclick="viewBackupJson()">📄 JSON 보기</button>
+<div class="row"><button onclick="backup()">백업</button><button onclick="document.getElementById('restore').click()">복원</button><input id="restore" type="file" accept=".json" class="hiddenInput"></div></div>
+<div class="row data-tools">
+  <button onclick="downloadBackup()">💾 데이터 백업</button>
   <button onclick="document.getElementById('backupFile').click()">📂 데이터 복원</button>
+  
   <input id="backupFile" type="file" accept=".json" class="hiddenInput">
 </div>
 <div id="sharedStatus" style="position:fixed;right:16px;bottom:16px;z-index:9999;background:#171520;color:#fff;padding:8px 11px;border-radius:12px;font-size:11px;box-shadow:0 6px 20px rgba(0,0,0,.2)">☁ 공용 데이터 연결 중…</div><div id="adminGate" class="admin-gate">
@@ -227,7 +230,7 @@ h1{letter-spacing:-.7px}
 
 <div class="stats-two-col">
   <div class="card"><h3>⚔️ 보스·약점별 딜</h3><div id="statsBoss"></div></div>
-  <div class="card"><h3>🥇 길드원 기여도</h3><div id="statsContribution"></div></div>
+  <div class="card"><h3>🥇 길드원 기여도</h3><div class="small muted">💥 숫자 = 해당 레이드에서 막타를 친 횟수</div><div id="statsContribution"></div></div>
 </div>
 
 <div class="card"><h3>📊 레이드 전체 성장 추이</h3><div id="statsRaidTrend" class="chartbox"></div></div>
@@ -317,6 +320,25 @@ async function adminLogin(){
   if(!(await verifyAdminPassword(p)))return alert('비밀번호가 틀렸어.');
   adminPassword=p;sessionStorage.setItem('guild_admin_password',p);
   applyAccessMode();setSharedStatus('👑 관리자 모드');
+  const pending=sessionStorage.getItem('nikke_pending_sync');
+  if(pending){
+    try{
+      const data=JSON.parse(pending);
+      const box=document.getElementById('nikkePaste');
+      if(box)box.value=JSON.stringify(data);
+      sessionStorage.removeItem('nikke_pending_sync');
+      if(typeof importNikkeSync==='function')importNikkeSync();
+    }catch(e){console.warn('[NIKKE pending sync]',e);}
+  }
+  if(pending){
+    try{
+      const data=JSON.parse(pending);
+      const box=document.getElementById('nikkePaste');
+      if(box)box.value=JSON.stringify(data);
+      sessionStorage.removeItem('nikke_pending_sync');
+      if(typeof importNikkeSync==='function') importNikkeSync();
+    }catch(e){console.warn('[NIKKE pending sync]',e);}
+  }
 }
 function adminLogout(){adminPassword='';sessionStorage.removeItem('guild_admin_password');applyAccessMode();setSharedStatus('👀 조회 모드');}
 function setSharedStatus(t){const el=document.getElementById('sharedStatus');if(el)el.textContent=t;}
@@ -360,10 +382,23 @@ function subscribeSharedData(){
 
 const bosses=[['보스 1','작열'],['보스 2','철갑'],['보스 3','수냉'],['보스 4','풍압'],['보스 5','전격']];
 const $=id=>document.getElementById(id);
+
+function fmtDamage(v, digits=1){
+ const n=Number(v)||0;
+ if(Math.abs(n)>=100000000){
+   const e=n/100000000;
+   return `${e.toLocaleString('ko-KR',{minimumFractionDigits:digits,maximumFractionDigits:digits})}억 <span class="raw-damage">(${n.toLocaleString('ko-KR')})</span>`;
+ }
+ return n.toLocaleString('ko-KR',{maximumFractionDigits:2});
+}
+function fmtRawNumber(v){
+ return (Number(v)||0).toLocaleString('ko-KR',{maximumFractionDigits:2});
+}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2)}
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function tab(id){document.querySelectorAll('section').forEach(x=>x.classList.add('hidden'));$(id).classList.remove('hidden');refresh()}
 function raid(id){return db.raids.find(x=>x.id===id)}
+function isRaidClosed(id){return !!db.raids.find(x=>x.id===id)?.closed}
 function mname(id){return db.members.find(x=>x.id===id)?.name||'(삭제된 길드원)'}
 function refresh(){
  $('dRaids').textContent=db.raids.length;$('dMembers').textContent=db.members.length;
@@ -443,21 +478,10 @@ function getMemberRows(payload){
  if(Array.isArray(raw))return raw;
  if(Array.isArray(raw?.data?.items))return raw.data.items;
  if(Array.isArray(raw?.items))return raw.items;
+ if(Array.isArray(raw?.data))return raw.data;
+ if(Array.isArray(payload?.guildMembers))return payload.guildMembers;
+ if(Array.isArray(payload?.guildMembers?.data?.items))return payload.guildMembers.data.items;
  return [];
-}
-function getCharacterMaster(payload){
- let raw=payload?.characterMaster||payload?.nikkeMaster;
- if(Array.isArray(raw)) return raw;
- if(Array.isArray(raw?.data)) return raw.data;
- return [];
-}
-function buildCharacterMap(payload){
- const map={};
- getCharacterMaster(payload).forEach(x=>{
-   if(x && x.id!=null && x.name_localkey?.name) map[String(Math.floor(+x.id/100))]=x.name_localkey.name;
-   if(x && x.id!=null && x.name) map[String(Math.floor(+x.id/100))]=x.name;
- });
- return map;
 }
 function getRaidRows(payload){
  if(Array.isArray(payload?.raid)) return payload.raid;
@@ -522,46 +546,60 @@ function pasteNikkeSync(){
  }).catch(()=>alert('클립보드 접근이 막혔어. JSON을 직접 붙여넣어줘.'));
 }
 function importNikkeSync(){
- const text=$('nikkePaste').value.trim(); if(!text)return alert('NIKKE 동기화 JSON을 넣어줘.');
- let payload;
- try{payload=JSON.parse(text);}catch(e){return alert('JSON 형식이 아니야. NIKKE 브리지에서 복사한 데이터를 사용해줘.');}
- const members=getMemberRows(payload).map(ensureMemberFromApi).filter(Boolean);
+ const text=$('nikkePaste').value.trim();if(!text)return alert('NIKKE 동기화 데이터가 없어.');
+ let payload;try{payload=JSON.parse(text)}catch(e){return alert('JSON 형식이 아니야.')}
+ const memberRows=getMemberRows(payload);
+ memberRows.forEach(ensureMemberFromApi);
  const raidsRaw=getRaidRows(payload).filter(x=>(+x.difficulty||2)===2);
  const roundLabel=deriveRound(payload);
  const targetRaid=ensureRaidForImport(roundLabel?`유레 ${roundLabel}차`:'NIKKE 유레');
- const nameMap=buildCharacterMap(payload);
  if(!targetRaid)return alert('레이드 회차를 만들지 못했어.');
- // Update/create bo ss definitions from API observation. Same boss+attribute can coexist.
+ const nameMap=buildCharacterMap(payload);
+ const decoded=raidsRaw.map(x=>decodeRaidRecord(x,nameMap)).filter(x=>x.nickname);
+
+ // NIKKE member endpoint is sometimes not present in the captured page response.
+ // In that case, populate the guild member list from raid nicknames so records still work.
+ decoded.forEach(r=>{
+   if(!db.members.some(m=>m.name===r.nickname)){
+     ensureMemberFromApi({nickname:r.nickname,openid:r.openid,member_id:r.openid, synchro_level:r.level});
+   }
+ });
+
  let addedRecords=0,matched=0;
- // Avoid duplicating the same API raid on repeated syncs.
  const existingKeys=new Set(db.records.filter(r=>r.raid===targetRaid.id).map(r=>[r.member,r.hit,r.bossName,r.damage,r.step].join('|')));
  const grouped={};
- raidsRaw.map(x=>decodeRaidRecord(x,nameMap)).filter(x=>x.nickname).forEach(r=>(grouped[r.nickname]??=[]).push(r));
+ decoded.forEach(r=>(grouped[r.nickname]??=[]).push(r));
  Object.values(grouped).forEach(list=>list.sort((a,b)=>((a.hitNo||99)-(b.hitNo||99))));
+
  for(const [nick,list] of Object.entries(grouped)){
    const mem=db.members.find(m=>m.name===nick);
-   if(!mem)continue; matched++;
-   const level=Math.max(0,...list.map(x=>x.level||0));if(level)mem.level=level;
+   if(!mem)continue;
+   matched++;
+   const level=Math.max(0,...list.map(x=>x.level||0),...(memberRows.filter(m=>m.nickname===nick).map(m=>+m.synchro_level||0)));
+   if(level)mem.level=level;
    list.slice(0,3).forEach((r,i)=>{
      const hit=i+1;
      const key=[mem.id,hit,r.bossName,r.damage,r.step].join('|');
      if(existingKeys.has(key))return;
      db.records.push({
-       id:uid(),raid:targetRaid.id,member:mem.id,hit,bossName:r.bossName,bossAttr:r.bossAttr,
-       weak:r.bossWeak,damage:r.damage,level:level,chars:r.chars,last:r.last,warn:false,
-       bossLevel:r.bossLevel,step:r.step,difficulty:r.difficulty,openid:r.openid,slots:r.slots,
-       source:'nikke-api'
-     });existingKeys.add(key);addedRecords++;
+       id:uid(),raid:targetRaid.id,member:mem.id,hit,
+       bossName:r.bossName,bossAttr:r.bossAttr,weak:r.bossWeak,damage:r.damage,
+       level:level,chars:r.chars,last:r.last,warn:false,bossLevel:r.bossLevel,
+       step:r.step,difficulty:r.difficulty,openid:r.openid,slots:r.slots,source:'nikke-api'
+     });
+     existingKeys.add(key);addedRecords++;
    });
  }
- // Add boss definitions without deleting user's manual ones.
+
  allBosses();
- raidsRaw.map(x=>decodeRaidRecord(x,nameMap)).forEach(r=>{
-   if(!r.bossName||!r.bossAttr)return;
-   if(!db.bosses.some(b=>b.name===r.bossName&&b.attr===r.bossAttr))db.bosses.push({name:r.bossName,attr:r.bossAttr,weak:r.bossWeak});
+ decoded.forEach(r=>{
+   if(r.bossName&&r.bossAttr&&!db.bosses.some(b=>b.name===r.bossName&&b.attr===r.bossAttr))
+     db.bosses.push({name:r.bossName,attr:r.bossAttr,weak:r.bossWeak});
  });
- save();
- $('nikkeImportResult').innerHTML=`✅ 동기화 완료<br>길드원 ${members.length}명 · 매칭 ${matched}명 · 공격 기록 ${addedRecords}건 · ${esc(targetRaid.no)}`;
+
+ if(typeof save==='function')save();
+ $('nikkeImportResult').innerHTML=`✅ 동기화 완료<br>길드원 ${db.members.length}명 · 매칭 ${matched}명 · 공격 ${addedRecords}건 · ${esc(targetRaid.no)}`;
+ try{tab('input')}catch(e){}
 }
 function renderGrid(){
  let rid=$('inputRaid').value;
@@ -684,7 +722,6 @@ function applyMeetupViewerMode(){
 function applyAccessMode(){
  applyMeetupViewerMode();
  document.querySelectorAll('.adminOnlyTab').forEach(b=>b.classList.toggle('hidden',!isAdmin()));
- const backup=document.getElementById('backupTools');if(backup)backup.classList.toggle('hidden',!isAdmin());
  const lo=document.getElementById('adminLogoutBtn');if(lo)lo.classList.toggle('hidden',!isAdmin());
  if(!isAdmin()){
    ['input','members','bosses','warnings'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.add('hidden');});
@@ -704,10 +741,10 @@ function renderStats(){
  let rid=sel.value,rs=db.records.filter(r=>r.raid===rid),total=rs.reduce((a,r)=>a+(+r.damage||0),0);
  let by={};rs.forEach(r=>by[r.member]=(by[r.member]||0)+(+r.damage||0));
  let participants=Object.keys(by).length,abs=db.members.filter(m=>!by[m.id]).length;
- $('stTotal').textContent=total.toFixed(2)+'억';
+ $('stTotal').innerHTML=fmtDamage(total);
  $('stParticipants').textContent=participants+'명';$('stAbsent').textContent=abs+'명';
  $('stLast').textContent=rs.filter(r=>r.last).length+'회';
- $('stAvg').textContent=(rs.length?total/rs.length:0).toFixed(2)+'억';
+ $('stAvg').innerHTML=fmtDamage(rs.length?total/rs.length:0);
  $('stWarnings').textContent=warningCounts()[Object.keys(by)[0]]?Object.values(warningCounts()).reduce((a,x)=>a+x,0)+'회':Object.values(warningCounts()).reduce((a,x)=>a+x,0)+'회';
 
  let sorted=Object.entries(by).sort((a,b)=>b[1]-a[1]);
@@ -716,7 +753,7 @@ function renderStats(){
    return `<div class="rank-row"><div class="rank-name"><span>${i+1}</span><b>${esc(mname(x[0]))}</b><em>${x[1].toFixed(2)}억 · ${pct.toFixed(1)}%</em></div><div class="bar-bg"><div class="bar-fill" style="width:${pct}%"></div></div></div>`;
  }).join('')+'</div>':'<div class="hint">기록이 없어.</div>';
 
- $('statsContribution').innerHTML=sorted.length?'<table><tr><th>길드원</th><th>딜량</th><th>기여도</th></tr>'+sorted.map(x=>`<tr><td>${esc(mname(x[0]))}</td><td>${x[1].toFixed(2)}억</td><td>${(x[1]/total*100).toFixed(1)}%</td></tr>`).join('')+'</table>':'<div class="hint">기록이 없어.</div>';
+ $('statsContribution').innerHTML=sorted.length?'<table><tr><th>길드원</th><th>딜량</th><th>기여도</th></tr>'+sorted.map(x=>`<tr><td>${esc(mname(x[0]))}</td><td>${fmtDamage(x[1])}</td><td>${(x[1]/total*100).toFixed(2)}%</td></tr>`).join('')+'</table>':'<div class="hint">기록이 없어.</div>';
 
  let bossMap={};rs.forEach(r=>{
    let ba=r.bossAttr||''; if(!ba && r.weak){const rev={'전격':'수냉','철갑':'전격','풍압':'철갑','작열':'풍압','수냉':'작열'};ba=rev[r.weak]||'';} let key=(r.bossName||'미지정')+'|'+ba;
@@ -724,7 +761,7 @@ function renderStats(){
    bossMap[key].sum+=+r.damage||0;bossMap[key].n++;bossMap[key].max=Math.max(bossMap[key].max,+r.damage||0);
  });
  let barr=Object.values(bossMap).sort((a,b)=>b.sum-a.sum);
- $('statsBoss').innerHTML=barr.length?'<table><tr><th>보스</th><th>속성·약점</th><th>누적</th><th>평균</th><th>최고</th></tr>'+barr.map(x=>`<tr><td>${esc(x.name)}</td><td>${x.attr||''}>>${x.weak||weakOf(x.attr)}</td><td>${x.sum.toFixed(2)}억</td><td>${(x.sum/x.n).toFixed(2)}억</td><td>${x.max.toFixed(2)}억</td></tr>`).join('')+'</table>':'<div class="hint">기록이 없어.</div>';
+ $('statsBoss').innerHTML=barr.length?'<table><tr><th>보스</th><th>속성·약점</th><th>누적</th><th>평균</th><th>최고</th></tr>'+barr.map(x=>`<tr><td>${esc(x.name)}</td><td>${x.attr||''}>>${x.weak||weakOf(x.attr)}</td><td>${fmtDamage(x.sum)}</td><td>${fmtDamage(x.sum/x.n)}</td><td>${fmtDamage(x.max)}</td></tr>`).join('')+'</table>':'<div class="hint">기록이 없어.</div>';
 
  let trend=db.raids.map(r=>{
    let a=db.records.filter(x=>x.raid===r.id),t=a.reduce((s,x)=>s+(+x.damage||0),0);
@@ -1080,7 +1117,7 @@ function renderDash(){
  $('dashRaid').value=rid;let rs=db.records.filter(x=>x.raid===rid),tot=rs.reduce((s,x)=>s+x.damage,0),by={};rs.forEach(x=>by[x.member]=(by[x.member]||0)+x.damage);
  let part=Object.keys(by).length,abs=db.members.filter(m=>!by[m.id]).length;$('dPart').textContent=part;$('dAbs').textContent=abs;
  $('dashInfo').innerHTML=`<div class="grid"><div class="stat"><span class="muted">총 딜</span><b>${tot.toFixed(2)}억</b></div><div class="stat"><span class="muted">참여</span><b>${part}/${db.members.length}</b></div><div class="stat"><span class="muted">미참여</span><b class="abs">${abs}명</b></div><div class="stat"><span class="muted">막타</span><b>${rs.filter(x=>x.last).length}회</b></div></div>`;
- let sorted=Object.entries(by).sort((a,b)=>b[1]-a[1]);$('rank').innerHTML='<table><tr><th>순위</th><th>길드원</th><th>딜량</th><th>기여도</th></tr>'+sorted.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(mname(x[0]))}</td><td>${x[1].toFixed(2)}억</td><td>${tot?(x[1]/tot*100).toFixed(1):0}%</td></tr>`).join('')+'</table>';drawPie(sorted,tot)
+ let sorted=Object.entries(by).sort((a,b)=>b[1]-a[1]);$('rank').innerHTML='<table><tr><th>순위</th><th>길드원</th><th>딜량</th><th>기여도</th></tr>'+sorted.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(mname(x[0]))}</td><td>${fmtDamage(x[1])}</td><td>${tot?(x[1]/tot*100).toFixed(1):0}%</td></tr>`).join('')+'</table>';drawPie(sorted,tot)
 }
 function renderBossCompare(){
  let map={};
@@ -1091,13 +1128,51 @@ function renderBossCompare(){
  });
  let arr=Object.values(map).sort((a,b)=>b.sum-a.sum);
  $('bossCompare').innerHTML=arr.length?'<table><tr><th>보스</th><th>약점</th><th>누적 딜</th><th>공격 수</th><th>평균 딜</th><th>최고 딜</th></tr>'+
- arr.map(x=>`<tr><td>${esc(x.name)}</td><td><span class="pill">${x.weak}</span></td><td>${x.sum.toFixed(2)}억</td><td>${x.n}</td><td>${(x.sum/x.n).toFixed(2)}억</td><td>${x.max.toFixed(2)}억</td></tr>`).join('')+'</table>':'<div class="hint">기록이 없어.</div>';
+ arr.map(x=>`<tr><td>${esc(x.name)}</td><td><span class="pill">${x.weak}</span></td><td>${fmtDamage(x.sum)}</td><td>${x.n}</td><td>${fmtDamage(x.sum/x.n)}</td><td>${fmtDamage(x.max)}</td></tr>`).join('')+'</table>':'<div class="hint">기록이 없어.</div>';
 }
 function drawPie(sorted,tot){
- if(!sorted.length){$('pie').innerHTML='<p class="muted">기록이 없어.</p>';return}
- let rows=sorted.slice(0,10),colors=['#ff6fae','#7aa7ff','#68d6a6','#ffc56b','#b58cff','#6ed6e8','#ff8c69','#a9b3c7','#d68cff','#7ee0c1'],cx=130,cy=130,r=95,ang=-Math.PI/2,svg=`<svg viewBox="0 0 720 280" width="100%" height="280">`;
- rows.forEach((x,i)=>{let a=x[1]/tot*Math.PI*2,x1=cx+r*Math.cos(ang),y1=cy+r*Math.sin(ang),x2=cx+r*Math.cos(ang+a),y2=cy+r*Math.sin(ang+a),lg=a>Math.PI?1:0;svg+=`<path d="M${cx},${cy}L${x1},${y1}A${r},${r} 0 ${lg} 1 ${x2},${y2}Z" fill="${colors[i]}"/>`;ang+=a});
- svg+='<circle cx="130" cy="130" r="43" fill="#0e131b"/>';rows.forEach((x,i)=>svg+=`<rect x="270" y="${25+i*25}" width="11" height="11" rx="3" fill="${colors[i]}"/><text x="289" y="${35+i*25}" fill="#f5f7fb" font-size="13">${esc(mname(x[0]))} · ${(x[1]/tot*100).toFixed(1)}%</text>`);svg+='</svg>';$('pie').innerHTML=svg
+ if(!db.members.length||!tot){
+   $('pie').innerHTML='<p class="muted">기록이 없어.</p>';
+   return;
+ }
+ const rid=$('dashRaid')?.value||db.raids.at(-1)?.id||'';
+ const byMember={};
+ const lastByMember={};
+ db.members.forEach(m=>{byMember[m.id]=0;lastByMember[m.id]=0;});
+ (db.records||[]).filter(r=>!rid||r.raid===rid).forEach(r=>{
+   byMember[r.member]=(byMember[r.member]||0)+(+r.damage||0);
+   if(r.last) lastByMember[r.member]=(lastByMember[r.member]||0)+1;
+ });
+ const all=db.members.map(m=>[m.id,byMember[m.id]||0]).sort((a,b)=>b[1]-a[1]);
+ const positive=all.filter(x=>x[1]>0);
+ const colors=Array.from({length:Math.max(32,positive.length)},(_,i)=>`hsl(${(i*360/Math.max(32,positive.length))%360} 72% 67%)`);
+ let cx=130,cy=130,r=95,ang=-Math.PI/2;
+ const height=Math.max(280,Math.ceil(all.length/2)*26+40);
+ let svg=`<svg viewBox="0 0 780 ${height}" width="100%" height="${height}">`;
+ positive.forEach((x,i)=>{
+   const frac=x[1]/tot,a=frac*Math.PI*2;
+   const x1=cx+r*Math.cos(ang),y1=cy+r*Math.sin(ang);
+   const x2=cx+r*Math.cos(ang+a),y2=cy+r*Math.sin(ang+a);
+   const lg=a>Math.PI?1:0;
+   if(a>0)svg+=`<path d="M${cx},${cy}L${x1},${y1}A${r},${r} 0 ${lg} 1 ${x2},${y2}Z" fill="${colors[i]}"/>`;
+   ang+=a;
+ });
+ svg+=`<circle cx="${cx}" cy="${cy}" r="43" fill="#0e131b"/>`;
+
+ const positiveColorIndex=new Map(positive.map((p,i)=>[p[0],i]));
+ all.forEach((x,i)=>{
+   const col=i%2,row=Math.floor(i/2);
+   const lx=270+col*250,ly=25+row*26;
+   const mc=lastByMember[x[0]]||0;
+   const colorIndex=positiveColorIndex.get(x[0]);
+   const swatchColor=colorIndex!=null?colors[colorIndex]:'#566070';
+   svg+=`<rect x="${lx}" y="${ly-9}" width="11" height="11" rx="3" fill="${swatchColor}"/>`;
+   svg+=`<text x="${lx+18}" y="${ly}" fill="#f5f7fb" font-size="12">${esc(mname(x[0]))} · ${(x[1]/tot*100).toFixed(2)}%`;
+   if(mc>0)svg+=` <tspan fill="#ff8f5a">💥${mc}</tspan>`;
+   svg+=`</text>`;
+ });
+ svg+='</svg>';
+ $('pie').innerHTML=svg;
 }
 function renderHistory(){
  let id=$('hm').value;if(!id){$('line').innerHTML='<p class="muted">길드원을 선택해줘.</p>';$('person').innerHTML='';$('ht').innerHTML='';return}
@@ -1133,58 +1208,56 @@ window.addEventListener('message',function(e){
 
 <script>
 function downloadBackup(){
-  if(!isAdmin()) return alert('관리자만 백업할 수 있어.');
-  try{
-    const json=JSON.stringify(db,null,2);
-    const blob=new Blob([json],{type:'application/json;charset=utf-8'});
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');
-    a.href=url;
-    a.download='강아지지휘관일지_백업_'+new Date().toISOString().slice(0,10)+'.json';
-    a.target='_blank';
-    a.rel='noopener';
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(function(){
-      try{document.body.removeChild(a)}catch(e){}
-      try{URL.revokeObjectURL(url)}catch(e){}
-    },3000);
-  }catch(e){
-    // Fallback: open raw JSON in a new tab so the user can Ctrl+S.
-    const json=JSON.stringify(db,null,2);
-    const dataUrl='data:application/json;charset=utf-8,'+encodeURIComponent(json);
-    window.open(dataUrl,'_blank');
-    alert('자동 다운로드가 브라우저에서 막혔어. 새 탭에 JSON이 열리면 Ctrl+S로 저장하면 돼.');
-  }
+  const data=JSON.stringify(db,null,2);
+  const blob=new Blob([data],{type:'application/json;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`강아지지휘관일지_백업_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
 }
-function viewBackupJson(){
-  if(!isAdmin()) return alert('관리자만 백업할 수 있어.');
-  const json=JSON.stringify(db,null,2);
-  const w=window.open();
-  if(!w) return alert('팝업이 차단됐어. 팝업을 허용한 뒤 다시 눌러줘.');
-  w.document.open();
-  w.document.write('<!doctype html><meta charset="utf-8"><title>강아지 지휘관 일지 JSON 백업</title><body><pre id="j"></pre></body>');
-  w.document.close();
-  const pre=w.document.getElementById('j');
-  pre.textContent=json;
+function downloadDataText(){
+  const data=JSON.stringify(db,null,2);
+  const blob=new Blob([data],{type:'application/json;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`강아지지휘관일지_공유데이터_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  alert('공유용 데이터 파일을 만들었어. 이 파일을 길드원에게 보내면 같은 데이터로 확인할 수 있어.');
 }
 document.getElementById('backupFile')?.addEventListener('change',e=>{
   const f=e.target.files?.[0]; if(!f)return;
-  if(!isAdmin()){e.target.value='';return alert('관리자만 데이터를 복원할 수 있어.')}
   const r=new FileReader();
-  r.onload=async()=>{
+  r.onload=()=>{
     try{
       const incoming=JSON.parse(r.result);
       if(!incoming || typeof incoming!=='object')throw new Error('잘못된 데이터');
       db=incoming;
       localStorage.setItem(KEY,JSON.stringify(db));
       refresh();
-      const ok=await pushSharedData();
-      alert(ok?'데이터 복원 완료! 공용 DB에도 반영됐어.':'데이터 복원은 됐지만 공용 DB 저장에 실패했어.');
+      alert('데이터 복원 완료!');
     }catch(err){alert('백업 파일을 읽지 못했어.')}
-    e.target.value='';
   };
   r.readAsText(f,'UTF-8');
 });
 </script>
-<script>window.addEventListener('load',()=>{applyAccessMode();loadSharedData();});</script><script>window.addEventListener('load',()=>{applyAccessMode();loadSharedData();});</script></body></html>
+<script>window.addEventListener('load',()=>{applyAccessMode();loadSharedData();});</script><script>window.addEventListener('load',()=>{applyAccessMode();loadSharedData();});</script>
+<script>
+window.addEventListener('message', function(e){
+  if(!e.data || e.data.type!=='nikke-full-sync') return;
+  try{
+    sessionStorage.setItem('nikke_pending_sync', JSON.stringify(e.data));
+    window.__lastNikkeSync=e.data;
+    if(typeof isAdmin==='function' && isAdmin()){
+      const box=document.getElementById('nikkePaste');
+      if(box) box.value=JSON.stringify(e.data);
+      if(typeof importNikkeSync==='function') importNikkeSync();
+    }else{
+      const st=document.getElementById('sharedStatus');
+      if(st) st.textContent='🔄 NIKKE 데이터 도착 · 관리자 로그인 후 자동 반영';
+    }
+  }catch(err){console.error(err)}
+});
+</script>
+</body></html>
